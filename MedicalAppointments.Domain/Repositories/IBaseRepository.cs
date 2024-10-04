@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MedicalAppointments.Domain.Result;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,8 +10,13 @@ namespace MedicalAppointments.Domain.Repositories
 {
     public interface IBaseRepository<TEntity> where TEntity : class
     {
-        Task Save(TEntity entity);
-        
+        Task<OperationResult> Save(TEntity entity);
+        Task<OperationResult> Update(TEntity entity);
+        Task<OperationResult> Remove(TEntity entity);
+        Task<OperationResult> GetAll();
+        Task<OperationResult> GetEntityBy(int id);
+        Task<OperationResult> Exists(Expression<Func<TEntity, bool>> filter);
+
     }
 
 }
