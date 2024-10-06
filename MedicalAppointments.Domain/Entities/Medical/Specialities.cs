@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointments.Domain.Entities.Medical
 {
-    public sealed class Specialities
+    [Table("Specialities", Schema = "medical")]
+    public sealed class Specialities : Base.Medical.BaseEntity
     {
+        [Key]
         public int SpecialtyID {  get; set; }
         public string SpecialtyName { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public bool IsActive {  get; set; }
+
     }
 }

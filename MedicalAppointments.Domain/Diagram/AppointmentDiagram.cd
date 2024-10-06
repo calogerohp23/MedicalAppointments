@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MedicalAppointments.Domain.Base.Appointments.BaseEntity">
+    <Position X="5.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\Appointments\BaseEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicalAppointments.Domain.Entities.Appointments.Appointment">
+    <Position X="3" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAACAAAACAAAAAIAAgAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Entities\Appointments\Appointment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicalAppointments.Domain.Entities.Appointments.DoctorAvailability">
+    <Position X="8" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgEAAAAAAAAAAAAAAAAAAAAAIAAgAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Entities\Appointments\DoctorAvailability.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

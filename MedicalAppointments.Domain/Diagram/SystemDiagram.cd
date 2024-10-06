@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MedicalAppointments.Domain.Entities.System.Notifications">
+    <Position X="4.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAACAAACAAAAAIAAAAAA=</HashCode>
+      <FileName>Entities\System\Notifications.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicalAppointments.Domain.Entities.System.Roles">
+    <Position X="6.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAACAAAECAAAAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Entities\System\Roles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MedicalAppointments.Domain.Entities.System.Status">
+    <Position X="9" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\System\Status.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

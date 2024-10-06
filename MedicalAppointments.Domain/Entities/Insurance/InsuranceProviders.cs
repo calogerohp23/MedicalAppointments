@@ -1,8 +1,12 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace MedicalAppointments.Domain.Entities.Insurance
 {
+    [Table("InsuranceProviders", Schema = "Insurance")]
     public sealed class InsuranceProviders: Base.Insurance.BaseEntity
     {
+        [Key]
         public int ProviderID {  get; set; }
         public string ContactNumber {  get; set; }
         public string Email {  get; set; }
@@ -15,7 +19,6 @@ namespace MedicalAppointments.Domain.Entities.Insurance
         public string CoverageDetails {  get; set; }
         public string? LogoUrl {  get; set; }
         public bool IsPreferred { get; set; }
-        public int NetworkTypeId { get; set; }
         public string? CustomerSupportContact { get; set; }
         public string? AcceptedRegions {  get; set; }
         public decimal? MaxCoverageAmount { get; set; }
