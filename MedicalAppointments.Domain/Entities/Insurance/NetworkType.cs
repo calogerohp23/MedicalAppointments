@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalAppointments.Domain.Entities.Insurance
 {
     [Table("NetworkType", Schema = "Insurance")]
-    public sealed class NetworkType: Base.Insurance.BaseEntity
+    public sealed class NetworkType: Base.BaseEntity
     {
         [Key]
-        public new int NetworkTypeID { get; set; }
+        public int NetworkTypeID { get; set; }
         public string? Description {  get; set; }
     }
 }

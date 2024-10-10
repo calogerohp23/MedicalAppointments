@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalAppointments.Domain.Entities.Medical
 {
     [Table("Specialities", Schema = "medical")]
-    public sealed class Specialities : Base.Medical.BaseEntity
+    public sealed class Specialities : Base.BaseEntity
     {
         [Key]
         public int SpecialtyID {  get; set; }
-        public string SpecialtyName { get; set; }
+        public string? SpecialtyName { get; set; }
 
     }
 }

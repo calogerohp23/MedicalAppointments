@@ -50,6 +50,23 @@ namespace MedicalAppointments.Persistance.Base
             return result;
         }
 
+        public virtual async Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var data = await this.entities.Where(filter).ToListAsync();
+                result.Data = data;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"An error has ocurred {ex.Message} when obtaining the registry.";
+            }
+
+            return result;
+        }
+
         public virtual async Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult result = new OperationResult();
@@ -113,6 +130,22 @@ namespace MedicalAppointments.Persistance.Base
             {
                 result.Success = false;
                 result.Message = $"An error has ocurred {ex.Message} updating the entity.";
+            }
+
+            return result;
+        }
+
+        Task<bool> IBaseRepository<TEntity>.Exists(Expression<Func<TEntity, bool>> filter)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                entities.FindAsync(filter)
+            }
+            catch(Exception ex)
+            {
+                result.Success = false;
+
             }
 
             return result;

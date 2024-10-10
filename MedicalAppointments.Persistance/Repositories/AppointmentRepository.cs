@@ -6,15 +6,16 @@ using MedicalAppointments.Persistance.Interfaces.Configuration;
 
 namespace MedicalAppointments.Persistance.Repositories
 {
-    public class AppointmentRepository : BaseRepository<Appointment>, IAppointments
+    public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentsRepository
     {
         public AppointmentRepository(MedicalAppointmentContext medicalAppointmentContext) : base(medicalAppointmentContext)
         {
         }
 
-        public override Task<OperationResult> Update(Appointment entity)
+        public List<OperationResult> GetAppointmentByUserID(int userID)
         {
-            return base.Update(entity);
+            throw new NotImplementedException();
         }
+
     }
 }
