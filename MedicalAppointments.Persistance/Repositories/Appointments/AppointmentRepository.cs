@@ -9,23 +9,20 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
     public class AppointmentRepository : BaseRepository<Appointment>, Interfaces.Appointments.IAppointmentRepository
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
+        private readonly EntityValidator<Appointment> _validator;
         private readonly ILogger<AppointmentRepository> logger;
-        public AppointmentRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AppointmentRepository> logger) : base(medicalAppointmentContext)
+        public AppointmentRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AppointmentRepository> logger, EntityValidator<Appointment> validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Appointment entity)
         {
-            EntityValidator<Appointment> validator = new EntityValidator<Appointment>;
-            OperationResult operationResult = new OperationResult();
-            
-            validator.ValidateNulls(entity);
 
-            validator.ValidateLessEqualZero();
-            validator.
-            validator.ValidateEqualZero()
+            _validator.ValidateNulls(entity);
+            _validator.ValidateLessEqualZero();
             try
             {
                 operationResult = await base.Save(entity);
