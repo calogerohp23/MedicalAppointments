@@ -2,11 +2,12 @@
 using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
+using MedicalAppointments.Persistance.Interfaces.Appointment;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointments.Persistance.Repositories.Appointments
 {
-    public class AppointmentRepository : BaseRepository<Appointment>, Interfaces.Appointments.IAppointmentRepository
+    public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRepository
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly EntityValidator<Appointment> _validator;
