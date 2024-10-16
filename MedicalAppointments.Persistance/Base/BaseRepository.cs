@@ -15,22 +15,9 @@ namespace MedicalAppointments.Persistance.Base
             _medicalAppointmentContext = medicalAppointmentContext;
             this.entities = _medicalAppointmentContext.Set<TEntity>();
         }
-        public virtual async Task<OperationResult> Exists(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> filter)
         {
-            OperationResult result = new OperationResult();
-            try
-            {
-                var exist = await this.entities.AnyAsync();
-                result.Data = exist;
-
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.Message = $"An error has ocurred {ex.Message} validating that the registry exists.";
-            }
-
-            return result;
+            return await this.entities.AnyAsync(filter);
         }
 
         public virtual async Task<OperationResult> GetAll()
@@ -39,23 +26,6 @@ namespace MedicalAppointments.Persistance.Base
             try
             {
                 var data = await this.entities.ToListAsync();
-                result.Data = data;
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;
-                result.Message = $"An error has ocurred {ex.Message} when obtaining the registry.";
-            }
-
-            return result;
-        }
-
-        public virtual async Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter)
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                var data = await this.entities.Where(filter).ToListAsync();
                 result.Data = data;
             }
             catch (Exception ex)
@@ -135,20 +105,6 @@ namespace MedicalAppointments.Persistance.Base
             return result;
         }
 
-        Task<bool> IBaseRepository<TEntity>.Exists(Expression<Func<TEntity, bool>> filter)
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                entities.FindAsync(filter)
-            }
-            catch(Exception ex)
-            {
-                result.Success = false;
 
-            }
-
-            return result;
-        }
     }
 }
