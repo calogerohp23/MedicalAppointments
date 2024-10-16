@@ -19,19 +19,22 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             this.logger = logger;
         }
 
+
         public async override Task<OperationResult> Save(Appointment entity)
         {
+            OperationResult operationResult = new OperationResult();
 
             _validator.ValidateNulls(entity);
-            _validator.ValidateLessEqualZero();
+            _validator.ValidateEqualZero(entity.);
+
             try
             {
-                operationResult = await base.Save(entity);
+                operationResult = await base.Save(entity);   
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = ex.Message;
+                operationResult.Message = "An error ocurred while saving the appointment.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;

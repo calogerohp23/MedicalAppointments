@@ -6,4 +6,19 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Base\Appointments\**" />
+    <Compile Remove="Base\Insurance\**" />
+    <Compile Remove="Base\Medical\**" />
+    <Compile Remove="Base\Users\**" />
+    <EmbeddedResource Remove="Base\Appointments\**" />
+    <EmbeddedResource Remove="Base\Insurance\**" />
+    <EmbeddedResource Remove="Base\Medical\**" />
+    <EmbeddedResource Remove="Base\Users\**" />
+    <None Remove="Base\Appointments\**" />
+    <None Remove="Base\Insurance\**" />
+    <None Remove="Base\Medical\**" />
+    <None Remove="Base\Users\**" />
+  </ItemGroup>
+
 </Project>

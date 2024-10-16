@@ -2,11 +2,9 @@
 
 namespace MedicalAppointments.Persistance.Base
 {
-    public class EntityValidator<TEntity> where TEntity : class
+    public class EntityValidator<TEntity>(OperationResult operationResult) where TEntity : class
     {
-        private readonly OperationResult _operationResult;
-
-        public EntityValidator(OperationResult operationResult) => _operationResult = operationResult;
+        private readonly OperationResult _operationResult = operationResult;
 
         public OperationResult ValidateNulls(TEntity entity) 
         {
@@ -45,7 +43,7 @@ namespace MedicalAppointments.Persistance.Base
 
         }
 
-        public async OperationResult ValidateDuplicateAsync(TEntity entity) {
+        /*public async OperationResult ValidateDuplicateAsync(TEntity entity) {
             if (await asiento =>
                 asiento.NumeroPiso == entity.NumeroPiso && asiento.NumeroAsiento == entity.NumeroAsiento) 
             {
@@ -53,7 +51,6 @@ namespace MedicalAppointments.Persistance.Base
             }
 
             return _operationResult;
-        }
-
+        }*/
     }
 }
