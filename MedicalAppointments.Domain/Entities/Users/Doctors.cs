@@ -7,7 +7,8 @@ namespace MedicalAppointments.Domain.Entities.Users
     public sealed class Doctors : Base.BaseEntity
     {
         [Key]
-        public int DoctorId {  get; set; }
+        public int DoctorID {  get; set; }
+        public int UserID { get; set; }
         public int SpecialtyId {  get; set; }
         public string? LicenseNumber {  get; set; }
         public int YearsOfExperieence {  get; set; }
