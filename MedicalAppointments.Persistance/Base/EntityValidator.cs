@@ -46,7 +46,8 @@ namespace MedicalAppointments.Persistance.Base
         }
 
         public async OperationResult ValidateDuplicateAsync(TEntity entity) {
-            if (await ) 
+            if (await asiento =>
+                asiento.NumeroPiso == entity.NumeroPiso && asiento.NumeroAsiento == entity.NumeroAsiento) 
             {
             
             }
