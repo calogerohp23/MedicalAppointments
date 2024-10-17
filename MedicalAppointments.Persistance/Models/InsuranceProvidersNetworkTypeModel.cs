@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MedicalAppointments.Domain.Entities.Insurance
+﻿namespace MedicalAppointments.Persistance.Models
 {
-    [Table("InsuranceProviders", Schema = "Insurance")]
-    public sealed class InsuranceProviders : Base.BaseEntity
+    public class InsuranceProvidersNetworkTypeModel
     {
-        [Key]
         public int InsuranceProviderID { get; set; }
+
         public string? Name { get; set; }
         public string? ContactNumber { get; set; }
         public string? Email { get; set; }
@@ -22,7 +18,14 @@ namespace MedicalAppointments.Domain.Entities.Insurance
         public bool IsPreferred { get; set; }
         public int NetworkTypeID { get; set; }
         public string? CustomerSupportContact { get; set; }
-        public string? AcceptedRegions { get; set; }
-        public decimal? MaxCoverageAmount { get; set; }
+        public string? AcceptedRegion { get; set; }
+        public decimal MaxCoverageAmount { get; set; }
+        public DateTime CreatdAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public bool IsActive { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
+
+
     }
 }
