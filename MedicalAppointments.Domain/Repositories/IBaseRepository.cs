@@ -1,4 +1,5 @@
-﻿using MedicalAppointments.Domain.Result;
+﻿using MedicalAppointments.Domain.Entities.Appointments;
+using MedicalAppointments.Domain.Result;
 using System.Linq.Expressions;
 
 namespace MedicalAppointments.Domain.Repositories
@@ -9,8 +10,10 @@ namespace MedicalAppointments.Domain.Repositories
         Task<OperationResult> Update(TEntity entity);
         Task<OperationResult> Remove(TEntity entity);
         Task<OperationResult> GetAll();
+        Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter);
         Task<OperationResult> GetEntityBy(int id);
         Task<bool> Exists(Expression<Func<TEntity, bool>> filter);
+        
     }
 
 }

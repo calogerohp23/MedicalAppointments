@@ -1,4 +1,5 @@
-﻿using MedicalAppointments.Domain.Repositories;
+﻿using MedicalAppointments.Domain.Entities.Appointments;
+using MedicalAppointments.Domain.Repositories;
 using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Context;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,11 @@ namespace MedicalAppointments.Persistance.Base
             }
 
             return result;
+        }
+
+        public Task<OperationResult> GetAll(Appointment entity)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual async Task<OperationResult> GetEntityBy(int id)

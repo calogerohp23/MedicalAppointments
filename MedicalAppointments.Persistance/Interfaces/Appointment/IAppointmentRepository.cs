@@ -1,5 +1,5 @@
 ﻿using MedicalAppointments.Domain.Repositories;
-
+using MedicalAppointments.Domain.Result;
 
 namespace MedicalAppointments.Persistance.Interfaces.Appointment
 {
