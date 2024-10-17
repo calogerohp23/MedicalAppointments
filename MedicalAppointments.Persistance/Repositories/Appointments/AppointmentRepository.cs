@@ -3,6 +3,8 @@ using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Appointment;
+using MedicalAppointments.Persistance.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointments.Persistance.Repositories.Appointments
@@ -35,7 +37,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 return operationResult;
             }
 
-            if (entity.PatientID == 0) {
+            if (entity.PatientID == 0)
+            {
                 operationResult.Success = false;
                 operationResult.Message = "No ha seleccionado un paciente";
                 return operationResult;
@@ -83,7 +86,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             try
             {
                 Appointment? appointmentToUpdate = await _medicalAppointmentContext.Appointments.FindAsync(entity.AppointmentID);
-                appointmentToUpdate.DoctorID = entity.AppointmentID;
+                appointmentToUpdate.PatientID = entity.PatientID;
+                appointmentToUpdate.DoctorID = entity.DoctorID;
                 appointmentToUpdate.AppointmentDate = entity.AppointmentDate;
                 appointmentToUpdate.StatusID = entity.StatusID;
                 appointmentToUpdate.UpdatedAt = entity.UpdatedAt;
@@ -125,25 +129,73 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             return operationResult;
         }
-        public async override Task<OperationResult> GetAll(Appointment entity)
+        public async override Task<OperationResult> GetAll()
         {
             OperationResult operationResult = new OperationResult();
-            if ()
-            {
-
-            }
-            if ()
-            {
-
-            }
             try
             {
-                operationResult.Data = await(from appointment in _medicalAppointmentContext.Appointments
-                                          
+                operationResult.Data = await (from appointment in _medicalAppointmentContext.Appointments
+                                              join patients in _medicalAppointmentContext.Patients on appointment.PatientID equals patients.PatientID
+                                              join doctors in _medicalAppointmentContext.Doctors on appointment.DoctorID equals doctors.DoctorID
+                                              join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
+                                              join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserId
+                                              join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserId
+                                              where appointment.StatusID == 3
+                                              orderby appointment.AppointmentDate descending
+                                              select new AppointmentPatientDoctorStatusModel
+                                              {
+                                                  AppointmentID = appointment.AppointmentID,
+                                                  Patient = patientUsers.FirstName + " " + patientUsers.LastName,
+                                                  Doctor = doctorUsers.FirstName + " " + doctorUsers.LastName,
+                                                  Status = status.StatusName,
+                                                  AppointmentDate = appointment.AppointmentDate,
+                                                  CreatedAt = appointment.CreatedAt,
+                                                  UpdatedAt = appointment.UpdatedAt,
+                                                  CreatedBy = appointment.CreatedBy,
+                                                  UpdatedBy = appointment.UpdatedBy
+                                              }).ToListAsync();
+
             }
-            catch (Exception ex) 
-            { 
-            
+            catch (Exception ex)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "Error obteniendo las reservaciones";
+                logger.LogError(operationResult.Message, ex.ToString());
+            }
+            return operationResult;
+        }
+
+        public async override Task<OperationResult> GetEntityBy(int Id)
+        {
+            OperationResult operationResult = new OperationResult();
+            try
+            {
+                operationResult.Data = await (from appointment in _medicalAppointmentContext.Appointments
+                                              join patients in _medicalAppointmentContext.Patients on appointment.PatientID equals patients.PatientID
+                                              join doctors in _medicalAppointmentContext.Doctors on appointment.DoctorID equals doctors.DoctorID
+                                              join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
+                                              join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserId
+                                              join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserId
+                                              where appointment.StatusID == 3 && appointment.AppointmentID == Id
+                                              orderby appointment.AppointmentDate descending
+                                              select new AppointmentPatientDoctorStatusModel
+                                              {
+                                                  AppointmentID = appointment.AppointmentID,
+                                                  Patient = patientUsers.FirstName + " " + patientUsers.LastName,
+                                                  Doctor = doctorUsers.FirstName + " " + doctorUsers.LastName,
+                                                  Status = status.StatusName,
+                                                  AppointmentDate = appointment.AppointmentDate,
+                                                  CreatedAt = appointment.CreatedAt,
+                                                  UpdatedAt = appointment.UpdatedAt,
+                                                  CreatedBy = appointment.CreatedBy,
+                                                  UpdatedBy = appointment.UpdatedBy
+                                              }).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "Error obteniendo las reservaciones";
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
