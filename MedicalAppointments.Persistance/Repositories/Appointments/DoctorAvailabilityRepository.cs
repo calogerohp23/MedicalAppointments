@@ -11,7 +11,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<DoctorAvailabilityRepository> logger;
-        public DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorAvailabilityRepository> logger): base(medicalAppointmentContext)
+        public DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorAvailabilityRepository> logger) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
             this.logger = logger;
@@ -20,19 +20,19 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         {
             OperationResult operationResult = new OperationResult();
 
-            if(entity == null)
+            if (entity == null)
             {
                 operationResult.Success = false;
                 operationResult.Message = "La entidad es nula";
                 return operationResult;
             }
-            if(entity.DoctorID == 0)
+            if (entity.DoctorID == 0)
             {
                 operationResult.Success = false;
                 operationResult.Message = "No ha seleccionado un doctor";
                 return operationResult;
             }
-            if (entity.StartTime == entity.EndTime) 
+            if (entity.StartTime == entity.EndTime)
             {
                 operationResult.Success = false;
                 operationResult.Message = "El tiempo de inicio no puede ser igual que el tiempo final";
@@ -44,7 +44,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             {
                 operationResult = await base.Save(entity);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "Hubo un error guardando la disponiblidad del doctor";
@@ -57,9 +57,9 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         {
             OperationResult operationResult = new OperationResult();
 
-            if (entity == null) 
+            if (entity == null)
             {
-                operationResult.Success= false;
+                operationResult.Success = false;
                 operationResult.Message = "La entidad es nula";
                 return operationResult;
             }
@@ -86,6 +86,51 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             return operationResult;
         }
-        public async override Task<OperationResult> 
+        public async override Task<OperationResult> Remove(DoctorAvailability entity)
+        {
+            OperationResult operationResult = new OperationResult();
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return operationResult;
+        }
+        public async override Task<OperationResult> GetAll()
+        {
+            OperationResult operationResult = new OperationResult();
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return operationResult;
+        }
+
+        public async override Task<OperationResult> GetEntityBy(int id)
+        {
+            OperationResult operationResult = new OperationResult();
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return operationResult;
+        }
     }
 }

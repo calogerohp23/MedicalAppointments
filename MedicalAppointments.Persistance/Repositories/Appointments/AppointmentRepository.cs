@@ -153,7 +153,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   UpdatedAt = appointment.UpdatedAt,
                                                   CreatedBy = appointment.CreatedBy,
                                                   UpdatedBy = appointment.UpdatedBy
-                                              }).ToListAsync();
+                                              }).AsNoTracking()
+                                            .ToListAsync();
 
             }
             catch (Exception ex)

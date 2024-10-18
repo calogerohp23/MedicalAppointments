@@ -17,15 +17,15 @@
         public string? LogoUrl { get; set; }
         public bool IsPreferred { get; set; }
         public int NetworkTypeID { get; set; }
+        public string? NetworkDescription { get; set; }
         public string? CustomerSupportContact { get; set; }
         public string? AcceptedRegion { get; set; }
-        public decimal MaxCoverageAmount { get; set; }
-        public DateTime CreatdAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public decimal? MaxCoverageAmount { get; set; }
+        public DateTime? CreatdAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; }
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
-
 
     }
 }

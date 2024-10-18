@@ -127,15 +127,87 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                               orderby insuranceProviders.CreatedAt descending
                                               select new InsuranceProvidersNetworkTypeModel()
                                               {
+                                                  Name = insuranceProviders.Name,
+                                                  ContactNumber = insuranceProviders.ContactNumber,
+                                                  Email = insuranceProviders.Email,
+                                                  Website = insuranceProviders.Website,
+                                                  Address = insuranceProviders.Address,
+                                                  City = insuranceProviders.City,
+                                                  State = insuranceProviders.State,
+                                                  Country = insuranceProviders.Country,
+                                                  ZipCode = insuranceProviders.ZipCode,
+                                                  CoverageDetails = insuranceProviders.CoverageDetails,
+                                                  LogoUrl = insuranceProviders.LogoUrl,
+                                                  IsPreferred = insuranceProviders.IsPreferred,
+                                                  NetworkTypeID = networkType.NetworkTypeID,
+                                                  NetworkDescription = networkType.Description,
+                                                  CustomerSupportContact = insuranceProviders.CustomerSupportContact,
+                                                  AcceptedRegion = insuranceProviders.AcceptedRegions,
+                                                  MaxCoverageAmount = insuranceProviders.MaxCoverageAmount,
+                                                  CreatdAt = insuranceProviders.CreatedAt,
+                                                  UpdatedAt = insuranceProviders.UpdatedAt,
+                                                  CreatedBy = insuranceProviders.CreatedBy,
+                                                  UpdatedBy = insuranceProviders.UpdatedBy,
 
-                                              }).ToListAsync();
+                                              }).AsNoTracking()
+                                            .ToListAsync();
             }
             catch (Exception ex)
             {
-
+                operationResult.Success = false;
+                operationResult.Message = "Ocurrio un error obteniendo los datos";
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
+        }
+
+        public async override Task<OperationResult> GetEntityBy(int id)
+        {
+            OperationResult operationResult = new OperationResult();
+
+            try
+            {
+                operationResult.Data = await (from insuranceProviders in _medicalAppointmentContext.InsuranceProviders
+                                              join networkType in _medicalAppointmentContext.NetworkType on insuranceProviders.NetworkTypeID equals networkType.NetworkTypeID
+                                              where insuranceProviders.IsActive == true && insuranceProviders.InsuranceProviderID == id
+                                              orderby insuranceProviders.CreatedAt descending
+                                              select new InsuranceProvidersNetworkTypeModel()
+                                              {
+                                                  Name = insuranceProviders.Name,
+                                                  ContactNumber = insuranceProviders.ContactNumber,
+                                                  Email = insuranceProviders.Email,
+                                                  Website = insuranceProviders.Website,
+                                                  Address = insuranceProviders.Address,
+                                                  City = insuranceProviders.City,
+                                                  State = insuranceProviders.State,
+                                                  Country = insuranceProviders.Country,
+                                                  ZipCode = insuranceProviders.ZipCode,
+                                                  CoverageDetails = insuranceProviders.CoverageDetails,
+                                                  LogoUrl = insuranceProviders.LogoUrl,
+                                                  IsPreferred = insuranceProviders.IsPreferred,
+                                                  NetworkTypeID = networkType.NetworkTypeID,
+                                                  NetworkDescription = networkType.Description,
+                                                  CustomerSupportContact = insuranceProviders.CustomerSupportContact,
+                                                  AcceptedRegion = insuranceProviders.AcceptedRegions,
+                                                  MaxCoverageAmount = insuranceProviders.MaxCoverageAmount,
+                                                  CreatdAt = insuranceProviders.CreatedAt,
+                                                  UpdatedAt = insuranceProviders.UpdatedAt,
+                                                  CreatedBy = insuranceProviders.CreatedBy,
+                                                  UpdatedBy = insuranceProviders.UpdatedBy,
+
+                                              }).AsNoTracking()
+                                            .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "Ocurrio un error obteniendo los datos del ID especificado";
+                this.logger.LogError(operationResult.Message, ex.ToString());
+            }
+
+            return operationResult;
+
 
         }
     }
