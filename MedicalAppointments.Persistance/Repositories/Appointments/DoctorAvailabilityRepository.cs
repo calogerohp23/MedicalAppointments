@@ -3,6 +3,8 @@ using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Appointment;
+using MedicalAppointments.Persistance.Models.Appointments;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointments.Persistance.Repositories.Appointments
@@ -20,28 +22,9 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         {
             OperationResult operationResult = new OperationResult();
 
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "La entidad es nula";
-                return operationResult;
-            }
-            if (entity.DoctorID == 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "No ha seleccionado un doctor";
-                return operationResult;
-            }
-            if (entity.StartTime == entity.EndTime)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "El tiempo de inicio no puede ser igual que el tiempo final";
-                return operationResult;
-            }
-
-            /* Fuese bueno agregar al Doctor Availability un update by, created by, updated at y created at*/
             try
             {
+                entity.IsActive = true;
                 operationResult = await base.Save(entity);
             }
             catch (Exception ex)
@@ -57,20 +40,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         {
             OperationResult operationResult = new OperationResult();
 
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "La entidad es nula";
-                return operationResult;
-            }
-
-            if (entity.StartTime == entity.EndTime)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "El tiempo de inicio no puede ser igual que el tiempo final";
-                return operationResult;
-            }
-
             try
             {
                 DoctorAvailability? doctorAvailabilityToUpdate = await _medicalAppointmentContext.DoctorAvailability.FindAsync(entity.AvailabilityId);
@@ -78,11 +47,17 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 doctorAvailabilityToUpdate.AvailableDate = entity.AvailableDate;
                 doctorAvailabilityToUpdate.StartTime = entity.StartTime;
                 doctorAvailabilityToUpdate.EndTime = entity.EndTime;
+                doctorAvailabilityToUpdate.CreatedAt = entity.CreatedAt;
+                doctorAvailabilityToUpdate.UpdatedAt = entity.UpdatedAt;
+                doctorAvailabilityToUpdate.CreatedBy = entity.CreatedBy;
+                doctorAvailabilityToUpdate.UpdatedBy = entity.UpdatedBy;
+
+                await base.Update(doctorAvailabilityToUpdate);
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Hubo un error actualizando la disponibilidad";
+                operationResult.Message = "There was an error updating the doctor's availability.";
             }
             return operationResult;
         }
@@ -92,11 +67,18 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
             try
             {
+                DoctorAvailability? doctorAvailabilityToRemove = await _medicalAppointmentContext.DoctorAvailability.FindAsync(entity.AvailabilityId);
+                doctorAvailabilityToRemove.IsActive = false;
+                doctorAvailabilityToRemove.UpdatedAt = entity.UpdatedAt;
+                doctorAvailabilityToRemove.UpdatedBy = entity.UpdatedBy;
 
+                await base.Update(doctorAvailabilityToRemove);
             }
             catch (Exception ex)
             {
-
+                operationResult.Success= false;
+                operationResult.Message = "There was an error removing the doctor's availability.";
+                this.logger.LogError(operationResult.Message, ex);
             }
 
             return operationResult;
@@ -107,11 +89,30 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
             try
             {
-
+                operationResult.Data = await (from doctorAvailabity in _medicalAppointmentContext.DoctorAvailability
+                                              join doctor in _medicalAppointmentContext.Doctors on doctorAvailabity.DoctorID equals doctor.DoctorID
+                                              join users in _medicalAppointmentContext.Users on doctor.UserID equals users.UserID
+                                              join specialties in _medicalAppointmentContext.Specialities on doctor.SpecialtyId equals specialties.SpecialtyID
+                                              where doctorAvailabity.IsActive == true
+                                              select new DoctorAvailabilityDoctorSpecialtyUsersModel()
+                                              {
+                                                  AvailabilityID = doctorAvailabity.AvailabilityId,
+                                                  DoctorId = doctor.DoctorID,
+                                                  FullName = users.FirstName + " " + users.LastName,
+                                                  Specialty = specialties.SpecialtyName,
+                                                  AvailableDate = doctorAvailabity.AvailableDate,
+                                                  StartTime = doctorAvailabity.StartTime,
+                                                  EndTime = doctorAvailabity.EndTime,
+                                                  CreatedAt = doctorAvailabity.CreatedAt,
+                                                  CreatedBy = doctorAvailabity.CreatedBy
+                                              }).AsNoTracking()
+                                            .ToListAsync();
             }
             catch (Exception ex)
             {
-
+                operationResult.Success = false;
+                operationResult.Message = "There was an error obtaining all the doctor's availability.";
+                this.logger.LogError(operationResult.Message, ex);
             }
 
             return operationResult;
@@ -123,11 +124,31 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
             try
             {
+                operationResult.Data = await (from doctorAvailabity in _medicalAppointmentContext.DoctorAvailability
+                                              join doctor in _medicalAppointmentContext.Doctors on doctorAvailabity.DoctorID equals doctor.DoctorID
+                                              join users in _medicalAppointmentContext.Users on doctor.UserID equals users.UserID
+                                              join specialties in _medicalAppointmentContext.Specialities on doctor.SpecialtyId equals specialties.SpecialtyID
+                                              where doctorAvailabity.IsActive == true && doctorAvailabity.AvailabilityId == id
+                                              select new DoctorAvailabilityDoctorSpecialtyUsersModel()
+                                              {
+                                                  AvailabilityID = doctorAvailabity.AvailabilityId,
+                                                  DoctorId = doctor.DoctorID,
+                                                  FullName = users.FirstName + " " + users.LastName,
+                                                  Specialty = specialties.SpecialtyName,
+                                                  AvailableDate = doctorAvailabity.AvailableDate,
+                                                  StartTime = doctorAvailabity.StartTime,
+                                                  EndTime = doctorAvailabity.EndTime,
+                                                  CreatedAt = doctorAvailabity.CreatedAt,
+                                                  CreatedBy = doctorAvailabity.CreatedBy
+                                              }).AsNoTracking()
+                                            .ToListAsync();
 
             }
             catch (Exception ex)
             {
-
+                operationResult.Success = false;
+                operationResult.Message = "There was an error obtaining all the doctor's availabilities.";
+                this.logger.LogError(operationResult.Message, ex);
             }
 
             return operationResult;

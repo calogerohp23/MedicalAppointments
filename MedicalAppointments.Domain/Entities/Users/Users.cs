@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.Users
     public sealed class Users: Base.BaseEntity
     {
         [Key]
-        public int UserId {  get; set; }
+        public int UserID {  get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }
