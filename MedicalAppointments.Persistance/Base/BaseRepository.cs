@@ -34,13 +34,23 @@ namespace MedicalAppointments.Persistance.Base
                 result.Success = false;
                 result.Message = $"An error has ocurred {ex.Message} when obtaining the registry.";
             }
-
             return result;
         }
 
-        public Task<OperationResult> GetAll(Appointment entity)
+        public virtual async Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter)
         {
-            throw new NotImplementedException();
+            OperationResult operationResult = new OperationResult();
+            try
+            {
+                var data = await this.entities.Where(filter).ToListAsync();
+                operationResult.Data = data;
+            }
+            catch (Exception ex)
+            {
+                operationResult.Success = false;
+                operationResult.Message = $"An error has ocurred {ex.Message} when obtaining the registry.";
+            }
+            return operationResult;
         }
 
         public virtual async Task<OperationResult> GetEntityBy(int id)
@@ -56,7 +66,6 @@ namespace MedicalAppointments.Persistance.Base
                 result.Success = false;
                 result.Message = $"An error has ocurred {ex.Message} obtaining the entity.";
             }
-
             return result;
         }
 
@@ -73,7 +82,6 @@ namespace MedicalAppointments.Persistance.Base
                 result.Success = false;
                 result.Message = $"An error has ocurred {ex.Message} removing the entity.";
             }
-
             return result;
         }
 
@@ -90,7 +98,6 @@ namespace MedicalAppointments.Persistance.Base
                 result.Success = false;
                 result.Message = $"An error has ocurred {ex.Message} saving the entity.";
             }
-
             return result;
         }
 
@@ -107,7 +114,6 @@ namespace MedicalAppointments.Persistance.Base
                 result.Success = false;
                 result.Message = $"An error has ocurred {ex.Message} updating the entity.";
             }
-
             return result;
         }
 

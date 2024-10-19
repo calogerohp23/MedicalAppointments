@@ -17,6 +17,9 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
+    <Folder Include="Models\Medical\" />
+    <Folder Include="Models\Users\" />
+    <Folder Include="Models\System\" />
   </ItemGroup>
 
 </Project>
