@@ -14,10 +14,12 @@
         public string? InsuranceProviderName { get; set; }
         public string? InsuranceProviderCustomerSupportContact { get; set; }
         public string? InsuranceProviderAcceptedRegions { get; set; }
-        public decimal InsuranceProviderMaxCoverage { get; set; }
+        public decimal? InsuranceProviderMaxCoverage { get; set; }
         public string? NetworkTypeName { get; set; }
         public string? NetworkTypeDescription { get; set; }
         public DateTime? CreatedAt { get; set; }
         public string? CreatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public string? UpdatedBy { get; set; }
     }
 }
