@@ -124,7 +124,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   NetworkTypeID = networkType.NetworkTypeID,
                                                   Name = networkType.Name,
                                                   Description = networkType.Description,
-                                                  CreatedAt = networkType.CreatedAt
+                                                  CreatedAt = networkType.CreatedAt,
+                                                  CreatedBy = networkType.CreatedBy,
                                               }).AsNoTracking()
                              .ToListAsync();
             }

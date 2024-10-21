@@ -52,9 +52,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
             try
             {
-                entity.StatusID = 1;
-                entity.CreatedAt = DateTime.UtcNow;
-                entity.UpdatedAt = DateTime.UtcNow;
+
                 operationResult = await base.Save(entity);
             }
             catch (Exception ex)
@@ -92,7 +90,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 appointmentToUpdate.StatusID = entity.StatusID;
                 appointmentToUpdate.UpdatedAt = entity.UpdatedAt;
                 appointmentToUpdate.UpdatedBy = entity.UpdatedBy;
-
+                appointmentToUpdate.IsActive = entity.IsActive;
             }
             catch (Exception ex)
             {
@@ -136,8 +134,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join patients in _medicalAppointmentContext.Patients on appointment.PatientID equals patients.PatientID
                                               join doctors in _medicalAppointmentContext.Doctors on appointment.DoctorID equals doctors.DoctorID
                                               join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
-                                              join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserId
-                                              join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserId
+                                              join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
+                                              join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
                                               where appointment.StatusID == 3
                                               orderby appointment.AppointmentDate descending
                                               select new AppointmentPatientDoctorStatusModel()
@@ -173,8 +171,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join patients in _medicalAppointmentContext.Patients on appointment.PatientID equals patients.PatientID
                                               join doctors in _medicalAppointmentContext.Doctors on appointment.DoctorID equals doctors.DoctorID
                                               join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
-                                              join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserId
-                                              join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserId
+                                              join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
+                                              join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
                                               where appointment.StatusID == 3 && appointment.AppointmentID == id
                                               orderby appointment.AppointmentDate descending
                                               select new AppointmentPatientDoctorStatusModel
