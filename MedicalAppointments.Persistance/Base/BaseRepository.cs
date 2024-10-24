@@ -1,5 +1,4 @@
-﻿using MedicalAppointments.Domain.Entities.Appointments;
-using MedicalAppointments.Domain.Repositories;
+﻿using MedicalAppointments.Domain.Repositories;
 using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Context;
 using Microsoft.EntityFrameworkCore;
