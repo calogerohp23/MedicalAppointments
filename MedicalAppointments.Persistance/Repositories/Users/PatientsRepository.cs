@@ -23,7 +23,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Save(Patients entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 await base.Save(entity);
@@ -39,7 +39,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Update(Patients entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 Patients? patientsToUpdate = await _medicalAppointmentContext.Patients.FindAsync(entity.PatientID);
@@ -68,7 +68,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Remove(Patients entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 Patients? patientsToRemove = await _medicalAppointmentContext.Patients.FindAsync(entity.PatientID);
@@ -87,7 +87,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from patients in _medicalAppointmentContext.Patients
@@ -130,7 +130,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from patients in _medicalAppointmentContext.Patients

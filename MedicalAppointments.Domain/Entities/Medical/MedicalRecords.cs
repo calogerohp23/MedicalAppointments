@@ -12,6 +12,6 @@ namespace MedicalAppointments.Domain.Entities.Medical
         public int DoctorID { get; set; }
         public string? Diagnosis { get; set; }
         public string? Treatment { get; set; }
-        public DateTime DateOfVisit { get; set; }
+        public DateTime? DateOfVisit { get; set; }
     }
 }

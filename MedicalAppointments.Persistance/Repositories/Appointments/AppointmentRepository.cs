@@ -21,35 +21,48 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> Save(Appointment entity)
         {
-            OperationResult operationResult = new OperationResult();
-
+            OperationResult operationResult = new();
+            // se repite
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es nula";
+                operationResult.Message = "The entity is null.";
                 return operationResult;
             }
-
-            if (entity.AppointmentDate <= DateTime.UtcNow)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "El appointment esta en una fecha pasada";
-                return operationResult;
-            }
-
             if (entity.PatientID == 0)
             {
                 operationResult.Success = false;
-                operationResult.Message = "No ha seleccionado un paciente";
+                operationResult.Message = "A patient hasn't been selected.";
                 return operationResult;
             }
             if (entity.DoctorID == 0)
             {
                 operationResult.Success = false;
-                operationResult.Message = "No ha seleccionado un doctor";
+                operationResult.Message = "A doctor hasn't been selected.";
+                return operationResult;
+            }
+            if (entity.AppointmentDate < DateTime.UtcNow)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The appointment date must be different.";
                 return operationResult;
             }
 
+            if (await base.Exists(appointment => appointment.AppointmentID == entity.AppointmentID
+                      && appointment.PatientID == entity.PatientID && appointment.DoctorID == entity.DoctorID))
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The appointment already exist.";
+                return operationResult;
+            }
+
+            // se repite - solo para appointemnts
+            if (entity.AppointmentDate.DayOfWeek == DayOfWeek.Saturday || entity.AppointmentDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The appointment can only be on business days.";
+                return operationResult;
+            }
             try
             {
 
@@ -66,19 +79,34 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> Update(Appointment entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
 
-
+            // se repite
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es nula";
+                operationResult.Message = "The entity is null.";
                 return operationResult;
             }
-            if (entity.StatusID != 1)
+            // se repite - solo para appointemnts
+            if (entity.StatusID == 2)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La reservacion ya no puede ser actualizada";
+                operationResult.Message = "The appointment has been removed.";
+                return operationResult;
+            }
+            // se repite - solo para appointemnts
+            if (entity.StatusID == 3)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The appointment has been completed.";
+                return operationResult;
+            }
+            // se repite - solo para appointemnts
+            if (entity.AppointmentDate.DayOfWeek == DayOfWeek.Saturday || entity.AppointmentDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The appointment can only be on business days.";
                 return operationResult;
             }
             try
@@ -103,11 +131,26 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> Remove(Appointment entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            // se repite
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es requerida";
+                operationResult.Message = "The entity is null.";
+                return operationResult;
+            }
+            // se repite - solo para appointemnts
+            if (entity.StatusID == 2)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The appointment has been removed.";
+                return operationResult;
+            }
+            // se repite - solo para appointemnts
+            if (entity.StatusID == 3)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The appointment has been completed.";
                 return operationResult;
             }
             try
@@ -127,7 +170,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         }
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from appointment in _medicalAppointmentContext.Appointments
@@ -136,7 +179,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
                                               join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
                                               join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
-                                              where appointment.StatusID == 3
                                               orderby appointment.AppointmentDate descending
                                               select new AppointmentPatientDoctorStatusModel()
                                               {
@@ -164,7 +206,13 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (id == 0)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The ID is null";
+                return operationResult;
+            }
             try
             {
                 operationResult.Data = await (from appointment in _medicalAppointmentContext.Appointments
@@ -173,7 +221,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
                                               join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
                                               join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
-                                              where appointment.StatusID == 3 && appointment.AppointmentID == id
+                                              where appointment.AppointmentID == id
                                               orderby appointment.AppointmentDate descending
                                               select new AppointmentPatientDoctorStatusModel
                                               {

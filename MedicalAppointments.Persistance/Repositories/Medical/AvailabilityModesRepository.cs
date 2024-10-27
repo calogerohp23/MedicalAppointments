@@ -22,7 +22,13 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> Save(AvailabilityModes entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if(entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
+            }
             try
             {
                 await base.Save(entity);
@@ -31,22 +37,26 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The availability mode couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
         public async override Task<OperationResult> Update(AvailabilityModes entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
+            }
             try
             {
                 AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(entity.SAvailabilityModeID);
                 availabilityModesToUpdate.SAvailabilityModeID = entity.SAvailabilityModeID;
                 availabilityModesToUpdate.AvailabilityMode = entity.AvailabilityMode;
-                availabilityModesToUpdate.CreatedAt = entity.CreatedAt;
                 availabilityModesToUpdate.UpdatedAt = entity.UpdatedAt;
-                availabilityModesToUpdate.CreatedBy = entity.CreatedBy;
                 availabilityModesToUpdate.UpdatedBy = entity.UpdatedBy;
 
             }
@@ -54,33 +64,39 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The availability mode couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(AvailabilityModes enitity)
+        public async override Task<OperationResult> Remove(AvailabilityModes entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
+            }
             try
             {
                 AvailabilityModes? availabilityModesToRemove = await _medicalAppointmentContext.AvailabilityModes.FindAsync(enitity.SAvailabilityModeID);
                 availabilityModesToRemove.IsActive = false;
-                availabilityModesToRemove.UpdatedAt = enitity.UpdatedAt;
-                availabilityModesToRemove.UpdatedBy = enitity.UpdatedBy;
+                availabilityModesToRemove.UpdatedAt = entity.UpdatedAt;
+                availabilityModesToRemove.UpdatedBy = entity.UpdatedBy;
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "The availability mode couldn't be removed.";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from availabilityModes in _medicalAppointmentContext.AvailabilityModes
@@ -90,6 +106,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                               {
                                                   SAvailabilityModeID = availabilityModes.SAvailabilityModeID,
                                                   AvailabilityMode = availabilityModes.AvailabilityMode,
+                                                  CreatedAt = availabilityModes.CreatedAt,
+                                                  CreatedBy = availabilityModes.CreatedBy,
                                                   UpdatedAt = availabilityModes.UpdatedAt,
                                                   UpdatedBy = availabilityModes.UpdatedBy,
                                               }).AsNoTracking()
@@ -99,14 +117,14 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaining all the availability modes.";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from availabilityModes in _medicalAppointmentContext.AvailabilityModes
@@ -116,6 +134,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                               {
                                                   SAvailabilityModeID = availabilityModes.SAvailabilityModeID,
                                                   AvailabilityMode = availabilityModes.AvailabilityMode,
+                                                  CreatedAt = availabilityModes.CreatedAt,
+                                                  CreatedBy = availabilityModes.CreatedBy,
                                                   UpdatedAt = availabilityModes.UpdatedAt,
                                                   UpdatedBy = availabilityModes.UpdatedBy,
                                               }).AsNoTracking()
@@ -125,7 +145,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaining all the availability modes.";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }

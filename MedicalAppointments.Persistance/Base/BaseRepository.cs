@@ -22,7 +22,7 @@ namespace MedicalAppointments.Persistance.Base
 
         public virtual async Task<OperationResult> GetAll()
         {
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
             try
             {
                 var data = await this.entities.ToListAsync();
@@ -38,7 +38,7 @@ namespace MedicalAppointments.Persistance.Base
 
         public virtual async Task<OperationResult> GetAll(Expression<Func<TEntity, bool>> filter)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 var data = await this.entities.Where(filter).ToListAsync();
@@ -54,7 +54,7 @@ namespace MedicalAppointments.Persistance.Base
 
         public virtual async Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
             try
             {
                 var entity = await this.entities.FindAsync(id);
@@ -70,7 +70,7 @@ namespace MedicalAppointments.Persistance.Base
 
         public virtual async Task<OperationResult> Remove(TEntity entity)
         {
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
             try
             {
                 entities.Remove(entity);
@@ -86,7 +86,7 @@ namespace MedicalAppointments.Persistance.Base
 
         public virtual async Task<OperationResult> Save(TEntity entity)
         {
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
             try
             {
                 entities.Add(entity);
@@ -102,7 +102,7 @@ namespace MedicalAppointments.Persistance.Base
 
         public virtual async Task<OperationResult> Update(TEntity entity)
         {
-            OperationResult result = new OperationResult();
+            OperationResult result = new();
             try
             {
                 entities.Update(entity);

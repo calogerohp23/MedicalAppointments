@@ -20,8 +20,31 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         }
         public async override Task<OperationResult> Save(DoctorAvailability entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
 
+            }
+            if (entity.DoctorID == 0)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The doctor hasn't been selected";
+            }
+            if (entity.StartTime == entity.EndTime)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The start time cannot be the same as the end time";
+                return operationResult;
+            }
+            if (await base.Exists(doctorAvailability => doctorAvailability.DoctorID == entity.DoctorID))
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The doctor availability time is already registered.";
+                return operationResult;
+            }
             try
             {
                 entity.IsActive = true;
@@ -38,8 +61,25 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         }
         public async override Task<OperationResult> Update(DoctorAvailability entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
 
+            }
+            if (entity.DoctorID == 0)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The doctor hasn't been selected";
+            }
+            if (entity.StartTime == entity.EndTime)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The start time cannot be the same as the end time";
+                return operationResult;
+            }
             try
             {
                 DoctorAvailability? doctorAvailabilityToUpdate = await _medicalAppointmentContext.DoctorAvailability.FindAsync(entity.AvailabilityId);
@@ -58,13 +98,20 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error updating the doctor's availability.";
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
         public async override Task<OperationResult> Remove(DoctorAvailability entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
 
+            }
             try
             {
                 DoctorAvailability? doctorAvailabilityToRemove = await _medicalAppointmentContext.DoctorAvailability.FindAsync(entity.AvailabilityId);
@@ -76,7 +123,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             catch (Exception ex)
             {
-                operationResult.Success= false;
+                operationResult.Success = false;
                 operationResult.Message = "There was an error removing the doctor's availability.";
                 this.logger.LogError(operationResult.Message, ex);
             }
@@ -85,7 +132,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         }
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
 
             try
             {
@@ -93,7 +140,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join doctor in _medicalAppointmentContext.Doctors on doctorAvailabity.DoctorID equals doctor.DoctorID
                                               join users in _medicalAppointmentContext.Users on doctor.UserID equals users.UserID
                                               join specialties in _medicalAppointmentContext.Specialities on doctor.SpecialtyId equals specialties.SpecialtyID
-                                              where doctorAvailabity.IsActive == true
                                               select new DoctorAvailabilityDoctorSpecialtyUsersModel()
                                               {
                                                   AvailabilityID = doctorAvailabity.AvailabilityId,
@@ -120,7 +166,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
 
             try
             {
@@ -128,7 +174,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join doctor in _medicalAppointmentContext.Doctors on doctorAvailabity.DoctorID equals doctor.DoctorID
                                               join users in _medicalAppointmentContext.Users on doctor.UserID equals users.UserID
                                               join specialties in _medicalAppointmentContext.Specialities on doctor.SpecialtyId equals specialties.SpecialtyID
-                                              where doctorAvailabity.IsActive == true && doctorAvailabity.AvailabilityId == id
+                                              where doctorAvailabity.AvailabilityId == id
                                               select new DoctorAvailabilityDoctorSpecialtyUsersModel()
                                               {
                                                   AvailabilityID = doctorAvailabity.AvailabilityId,

@@ -22,7 +22,19 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Save(Doctors entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null.";
+                return operationResult;
+            }
+            if (entity.LicenseExpirationDate < DateOnly.FromDateTime(DateTime.UtcNow))
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The Doctor's licence is already expired";
+                return operationResult;
+            }
             try
             {
                 await base.Save(entity);
@@ -38,7 +50,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Update(Doctors entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 Doctors? doctorsToUpdate = await _medicalAppointmentContext.Doctors.FindAsync(entity.DoctorID);
@@ -67,7 +79,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Remove(Doctors entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 Doctors? doctorsToRemove = await _medicalAppointmentContext.Doctors.FindAsync(entity.DoctorID);
@@ -86,7 +98,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from doctors in _medicalAppointmentContext.Doctors
@@ -126,7 +138,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from doctors in _medicalAppointmentContext.Doctors

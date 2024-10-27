@@ -14,7 +14,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<NetworkTypeRepository> logger;
 
-        public NetworkTypeRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NetworkTypeRepository> logger ) : base(medicalAppointmentContext)
+        public NetworkTypeRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NetworkTypeRepository> logger) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
             this.logger = logger;
@@ -22,35 +22,44 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> Save(NetworkType entity)
         {
-            OperationResult operationResult = new OperationResult();
-
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
+            }
             try
             {
                 await base.Save(entity);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error saving the Network";
-                this.logger.LogError(operationResult.Message, ex);
-            
+                this.logger.LogError(operationResult.Message, ex.ToString());
+
             }
             return operationResult;
         }
 
         public async override Task<OperationResult> Update(NetworkType entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
+            }
             try
             {
                 NetworkType? networkTypeToUpdate = await _medicalAppointmentContext.NetworkType.FindAsync(entity.NetworkTypeID);
-                
+
                 networkTypeToUpdate.Name = entity.Name;
                 networkTypeToUpdate.Description = entity.Description;
-                networkTypeToUpdate.CreatedAt = entity.CreatedAt;
                 networkTypeToUpdate.UpdatedAt = entity.UpdatedAt;
                 networkTypeToUpdate.IsActive = entity.IsActive;
-                networkTypeToUpdate.CreatedBy = entity.CreatedBy;
                 networkTypeToUpdate.UpdatedBy = entity.UpdatedBy;
 
                 await base.Update(entity);
@@ -59,35 +68,41 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error updating the Network";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
 
             }
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(NetworkType enitity)
+        public async override Task<OperationResult> Remove(NetworkType entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null";
+                return operationResult;
+            }
             try
             {
-                NetworkType? networkTypeToRemove = await _medicalAppointmentContext.NetworkType.FindAsync(enitity.NetworkTypeID);
+                NetworkType? networkTypeToRemove = await _medicalAppointmentContext.NetworkType.FindAsync(entity.NetworkTypeID);
 
                 networkTypeToRemove.IsActive = false;
-                networkTypeToRemove.UpdatedAt = enitity.UpdatedAt;
-                networkTypeToRemove.UpdatedBy = enitity.UpdatedBy;
+                networkTypeToRemove.UpdatedAt = entity.UpdatedAt;
+                networkTypeToRemove.UpdatedBy = entity.UpdatedBy;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error removing the Network";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from networkType in _medicalAppointmentContext.NetworkType
@@ -106,14 +121,14 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error getting all the Networks";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from networkType in _medicalAppointmentContext.NetworkType
@@ -133,7 +148,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error getting all the Networks";
-                this.logger.LogError(operationResult.Message, ex);
+                this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }

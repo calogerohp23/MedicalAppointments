@@ -21,7 +21,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Save(Domain.Entities.Users.Users entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 await base.Save(entity);
@@ -37,7 +37,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Update(Domain.Entities.Users.Users entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 Domain.Entities.Users.Users? usersToUpdate = await _medicalAppointmentContext.Users.FindAsync(entity.UserID);
@@ -63,7 +63,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Remove(Domain.Entities.Users.Users entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 Domain.Entities.Users.Users? usersToRemove = await _medicalAppointmentContext.Users.FindAsync(entity.UserID);
@@ -82,7 +82,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from users in _medicalAppointmentContext.Users
@@ -114,7 +114,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from users in _medicalAppointmentContext.Users

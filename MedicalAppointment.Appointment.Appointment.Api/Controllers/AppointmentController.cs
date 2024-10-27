@@ -10,7 +10,7 @@ namespace MedicalAppointment.Appointment.Api.Controllers
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentRepository _appointmentRepository;
-        public AppointmentController(IAppointmentRepository appointmentRepository) 
+        public AppointmentController(IAppointmentRepository appointmentRepository)
         {
             _appointmentRepository = appointmentRepository;
         }
@@ -19,13 +19,12 @@ namespace MedicalAppointment.Appointment.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var result = await _appointmentRepository.GetAll();
+
             if (!result.Success)
             {
                 return BadRequest(result);
             }
-            else
-            {                return Ok(result);
-            }
+            return Ok(result);
         }
 
         // GET api/<AppointmentController>/5

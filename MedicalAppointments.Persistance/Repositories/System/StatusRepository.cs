@@ -22,7 +22,13 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> Save(Status entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null.";
+                return operationResult;
+            }
             try 
             {
                 await base.Save(entity);
@@ -38,7 +44,13 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> Update(Status entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null.";
+                return operationResult;
+            }
             try
             {
                 Status? statusToUpdate = await _medicalAppointmentContext.Status.FindAsync(entity.StatusId);
@@ -56,7 +68,13 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> Remove(Status enitity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
+            if (entity == null)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The entity is null.";
+                return operationResult;
+            }
             try
             {
                 Status? statusToRemove = await _medicalAppointmentContext.Status.FindAsync(enitity.StatusId);
@@ -73,7 +91,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from status in _medicalAppointmentContext.Status
@@ -95,7 +113,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from status in _medicalAppointmentContext.Status

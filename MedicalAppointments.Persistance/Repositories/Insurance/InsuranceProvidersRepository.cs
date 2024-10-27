@@ -22,21 +22,14 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async Task<OperationResult> Save(InsuranceProviders entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
 
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es nula";
+                operationResult.Message = "The entity is null";
                 return operationResult;
             }
-            if (await base.Exists(insurance => insurance.Email == entity.Email))
-            {
-                operationResult.Success = false;
-                operationResult.Message = "El email se encuentra registrado";
-                return operationResult;
-            }
-
             try
             {
                 operationResult = await base.Save(entity);
@@ -44,18 +37,18 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Hubo un error guardando la entidad";
+                operationResult.Message = "There was an error saving the Insurance Provider.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
         public async override Task<OperationResult> Update(InsuranceProviders entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es nula";
+                operationResult.Message = "The entity is null";
                 return operationResult;
             }
             try
@@ -77,16 +70,14 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 insuranceProvidersToUpdate.CustomerSupportContact = entity.CustomerSupportContact;
                 insuranceProvidersToUpdate.AcceptedRegions = entity.AcceptedRegions;
                 insuranceProvidersToUpdate.MaxCoverageAmount = entity.MaxCoverageAmount;
-                insuranceProvidersToUpdate.CreatedAt = entity.CreatedAt;
                 insuranceProvidersToUpdate.UpdatedAt = entity.UpdatedAt;
                 insuranceProvidersToUpdate.IsActive = entity.IsActive;
                 insuranceProvidersToUpdate.UpdatedBy = entity.UpdatedBy;
-                insuranceProvidersToUpdate.CreatedBy = entity.CreatedBy;
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Hubo un error actualizando el proveedor";
+                operationResult.Message = "There was an error updating the Insurance provider.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -94,11 +85,11 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> Remove(InsuranceProviders entity)
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "La entidad es nula";
+                operationResult.Message = "The entity is null";
                 return operationResult;
             }
             try
@@ -111,14 +102,14 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Hubo un error removiendo el proveedor";
+                operationResult.Message = "There was an error removing the Insurance provider.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
         public async override Task<OperationResult> GetAll()
         {
-            OperationResult operationResult = new OperationResult();
+            OperationResult operationResult = new();
             try
             {
                 operationResult.Data = await (from insuranceProviders in _medicalAppointmentContext.InsuranceProviders
@@ -155,7 +146,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Ocurrio un error obteniendo los datos";
+                operationResult.Message = "There was an error obtaining the Insurance Providers.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
 
@@ -164,8 +155,13 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new OperationResult();
-
+            OperationResult operationResult = new();
+            if(id == 0)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The insurance provider does not exist";
+                return operationResult;
+            }
             try
             {
                 operationResult.Data = await (from insuranceProviders in _medicalAppointmentContext.InsuranceProviders
@@ -202,7 +198,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Ocurrio un error obteniendo los datos del ID especificado";
+                operationResult.Message = "There was an error obtaining the specific Insurance Providers.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
 
