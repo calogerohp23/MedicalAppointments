@@ -13,15 +13,18 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
     public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRepository
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
+        private readonly ValidatorBase _validator;
         private readonly ILogger<AppointmentRepository> logger;
-        public AppointmentRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AppointmentRepository> logger) : base(medicalAppointmentContext)
+        public AppointmentRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AppointmentRepository> logger, ValidatorBase validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Appointment entity)
         {
+<<<<<<< Updated upstream
             OperationResult operationResult = new();
             // se repite
             if (entity == null)
@@ -64,6 +67,14 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 operationResult.Message = "The appointment can only be on business days.";
                 return operationResult;
             }
+=======
+            OperationResult operationResult = new OperationResult();
+
+            _validator.EntitityNull(entity);
+            _validator.EqualOrLessThanZero(entity.PatientID, "patient");
+            _validator.EqualOrLessThanZero(entity.DoctorID, "doctor");
+            _validator.Equal(entity.StatusID, 1, "The appointment cannot be saved");
+>>>>>>> Stashed changes
             try
             {
 
@@ -80,6 +91,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> Update(Appointment entity)
         {
+<<<<<<< Updated upstream
             OperationResult operationResult = new();
 
             // se repite
@@ -110,6 +122,14 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 operationResult.Message = "The appointment can only be on business days.";
                 return operationResult;
             }
+=======
+            OperationResult operationResult = new OperationResult();
+
+            _validator.EntitityNull(entity);
+            _validator.Inequality(entity.StatusID, 1, "The appointment cannot be updated.");
+            _validator.PastDate(entity.AppointmentDate, DateTime.UtcNow, "appointment date");
+
+>>>>>>> Stashed changes
             try
             {
                 Appointment? appointmentToUpdate = await _medicalAppointmentContext.Appointments.FindAsync(entity.AppointmentID);
@@ -132,6 +152,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> Remove(Appointment entity)
         {
+<<<<<<< Updated upstream
             OperationResult operationResult = new();
             // se repite
             if (entity == null)
@@ -154,6 +175,10 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 operationResult.Message = "The appointment has been completed.";
                 return operationResult;
             }
+=======
+            OperationResult operationResult = new OperationResult();
+            _validator.EntitityNull(entity);
+>>>>>>> Stashed changes
             try
             {
                 Appointment? appointmentToRemove = await _medicalAppointmentContext.Appointments.FindAsync(entity.AppointmentID);
@@ -199,7 +224,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Error obteniendo las reservaciones";
+                operationResult.Message = "An error ocurred while obtaining the appointments registry.";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -207,6 +232,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
+<<<<<<< Updated upstream
             OperationResult operationResult = new();
             if (id == 0)
             {
@@ -214,6 +240,10 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 operationResult.Message = "The ID is null";
                 return operationResult;
             }
+=======
+            _validator.EqualOrLessThanZero(id, "ID");
+            OperationResult operationResult = new OperationResult();
+>>>>>>> Stashed changes
             try
             {
                 operationResult.Data = await (from appointment in _medicalAppointmentContext.Appointments
@@ -240,7 +270,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Error obteniendo las reservaciones";
+                operationResult.Message = "An error ocurred while obtaining the appointments registry.";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;

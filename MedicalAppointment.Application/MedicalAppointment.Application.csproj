@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Appointments\" />
+    <Folder Include="Contracts\Insurance\" />
+    <Folder Include="Contracts\Medical\" />
+    <Folder Include="Contracts\Users\" />
+    <Folder Include="Contracts\System\" />
+    <Folder Include="Core\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

@@ -21,7 +21,18 @@ namespace MedicalAppointments.Persistance.Repositories.Users
 
         public async override Task<OperationResult> Save(Domain.Entities.Users.Users entity)
         {
+<<<<<<< Updated upstream
             OperationResult operationResult = new();
+=======
+            OperationResult operationResult = new OperationResult();
+            if (await base.Exists(users => users.Email == entity.Email))
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The email already exist.";
+                return operationResult;
+            }
+
+>>>>>>> Stashed changes
             try
             {
                 await base.Save(entity);
