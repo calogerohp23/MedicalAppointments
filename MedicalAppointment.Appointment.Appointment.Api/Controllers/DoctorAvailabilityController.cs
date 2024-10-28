@@ -29,10 +29,16 @@ namespace MedicalAppointment.Appointment.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetDoctorAvailabilityByID")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _doctorAvailabilityRepository.GetEntityBy(id);
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         [HttpPost("SaveDoctorAvailability")]
@@ -46,16 +52,26 @@ namespace MedicalAppointment.Appointment.Api.Controllers
             return Ok(result);
         }
 
-        // PUT api/<DoctorAvailabilityController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateDoctorAvailability")]
+        public async Task<IActionResult> Put([FromBody] DoctorAvailability doctorAvailability)
         {
+            var result = await _doctorAvailabilityRepository.Update(doctorAvailability);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // DELETE api/<DoctorAvailabilityController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("DisableDoctorAvailability")]
+        public async Task<IActionResult> Delete(DoctorAvailability doctorAvailability)
         {
+            var result = await _doctorAvailabilityRepository.Remove(doctorAvailability);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

@@ -7,7 +7,7 @@ using MedicalAppointments.Persistance.Models.System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace MedicalAppointments.Persistance.Repositories.Insurance
+namespace MedicalAppointments.Persistance.Repositories.System
 {
     public class NotificationsRepository : BaseRepository<Notifications>, INotificationsRepository
     {
@@ -23,7 +23,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> Save(Notifications entity)
         {
             OperationResult operationResult = new();
-            if(entity == null)
+            if (entity == null)
             {
                 operationResult.Success = false;
                 operationResult.Message = "The entity is null";
@@ -33,11 +33,11 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 await base.Save(entity);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "The Notification couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -56,7 +56,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The Notification couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -75,7 +75,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The Notification couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -100,7 +100,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The Notification couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -125,7 +125,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The Notification couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;

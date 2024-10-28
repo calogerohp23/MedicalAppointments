@@ -7,7 +7,7 @@ using MedicalAppointments.Persistance.Models.Medical;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace MedicalAppointments.Persistance.Repositories.Insurance
+namespace MedicalAppointments.Persistance.Repositories.Medical
 {
     public class AvailabilityModesRepository : BaseRepository<AvailabilityModes>, IAvailabilityModesRepository
     {
@@ -23,7 +23,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> Save(AvailabilityModes entity)
         {
             OperationResult operationResult = new();
-            if(entity == null)
+            if (entity == null)
             {
                 operationResult.Success = false;
                 operationResult.Message = "The entity is null";
@@ -37,7 +37,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The availability mode couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -64,7 +64,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The availability mode couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -80,7 +80,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             }
             try
             {
-                AvailabilityModes? availabilityModesToRemove = await _medicalAppointmentContext.AvailabilityModes.FindAsync(enitity.SAvailabilityModeID);
+                AvailabilityModes? availabilityModesToRemove = await _medicalAppointmentContext.AvailabilityModes.FindAsync(entity.SAvailabilityModeID);
                 availabilityModesToRemove.IsActive = false;
                 availabilityModesToRemove.UpdatedAt = entity.UpdatedAt;
                 availabilityModesToRemove.UpdatedBy = entity.UpdatedBy;
@@ -89,7 +89,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The availability mode couldn't be removed.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -117,7 +117,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaining all the availability modes.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -145,7 +145,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaining all the availability modes.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }

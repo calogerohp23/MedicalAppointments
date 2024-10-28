@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Appointment;
 using MedicalAppointments.Persistance.Models;
+using MedicalAppointments.Persistance.Models.Appointments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

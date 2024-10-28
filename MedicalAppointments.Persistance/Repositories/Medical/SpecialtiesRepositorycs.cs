@@ -7,7 +7,7 @@ using MedicalAppointments.Persistance.Models.Medical;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace MedicalAppointments.Persistance.Repositories.Insurance
+namespace MedicalAppointments.Persistance.Repositories.Medical
 {
     public class SpecialtiesRepositroy : BaseRepository<Specialities>, ISpecialtiesRepository
     {
@@ -37,7 +37,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The specialty couldn't be saved.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -65,7 +65,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The specialty couldn't be updated.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -94,7 +94,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The specialty couldn't be removed.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -123,7 +123,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The specialty couldn't be obtained.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -160,7 +160,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "The specialty couldn't be obtained.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }

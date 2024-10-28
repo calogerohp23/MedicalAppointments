@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Insurance;
 using MedicalAppointments.Persistance.Models;
+using MedicalAppointments.Persistance.Models.Insurance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -20,7 +21,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             this.logger = logger;
         }
 
-        public async Task<OperationResult> Save(InsuranceProviders entity)
+        public async override Task<OperationResult> Save(InsuranceProviders entity)
         {
             OperationResult operationResult = new();
 

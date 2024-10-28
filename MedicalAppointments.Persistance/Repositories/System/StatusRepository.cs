@@ -7,7 +7,7 @@ using MedicalAppointments.Persistance.Models.System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace MedicalAppointments.Persistance.Repositories.Insurance
+namespace MedicalAppointments.Persistance.Repositories.System
 {
     public class StatusRepository : BaseRepository<Status>, IStatusRepository
     {
@@ -29,15 +29,15 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 operationResult.Message = "The entity is null.";
                 return operationResult;
             }
-            try 
+            try
             {
                 await base.Save(entity);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error saving the status.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -55,18 +55,18 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 Status? statusToUpdate = await _medicalAppointmentContext.Status.FindAsync(entity.StatusId);
                 statusToUpdate.StatusName = entity.StatusName;
-               
+
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error saving the status.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(Status enitity)
+        public async override Task<OperationResult> Remove(Status entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -77,14 +77,14 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             }
             try
             {
-                Status? statusToRemove = await _medicalAppointmentContext.Status.FindAsync(enitity.StatusId);
-                statusToRemove.StatusName = enitity.StatusName;
+                Status? statusToRemove = await _medicalAppointmentContext.Status.FindAsync(entity.StatusId);
+                statusToRemove.StatusName = entity.StatusName;
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error saving the status.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -95,18 +95,18 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             try
             {
                 operationResult.Data = await (from status in _medicalAppointmentContext.Status
-                                        select new StatusModel()
-                                        {
-                                            StatusID = status.StatusId,
-                                            StatusName = status.StatusName,
-                                        }).AsNoTracking()
+                                              select new StatusModel()
+                                              {
+                                                  StatusID = status.StatusId,
+                                                  StatusName = status.StatusName,
+                                              }).AsNoTracking()
                                         .ToListAsync();
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error saving the status.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -117,19 +117,19 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             try
             {
                 operationResult.Data = await (from status in _medicalAppointmentContext.Status
-                                        where status.StatusId == id
-                                        select new StatusModel()
-                                        {
-                                            StatusID = status.StatusId,
-                                            StatusName = status.StatusName,
-                                        }).AsNoTracking()
+                                              where status.StatusId == id
+                                              select new StatusModel()
+                                              {
+                                                  StatusID = status.StatusId,
+                                                  StatusName = status.StatusName,
+                                              }).AsNoTracking()
                         .ToListAsync();
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error saving the status.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }

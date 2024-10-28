@@ -7,6 +7,5 @@ namespace MedicalAppointments.Persistance.Interfaces.Medical
 {
     public interface IMedicalRecordsRepository : IBaseRepository<MedicalRecords>
     {
-        Task<OperationResult> Remove(MedicalRecords entity);
     }
 }

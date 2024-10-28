@@ -7,7 +7,7 @@ using MedicalAppointments.Persistance.Models.Medical;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace MedicalAppointments.Persistance.Repositories.Insurance
+namespace MedicalAppointments.Persistance.Repositories.Medical
 {
     public class MedicalRecordsRepository : BaseRepository<MedicalRecords>, IMedicalRecordsRepository
     {
@@ -37,11 +37,11 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = true;
                 operationResult.Message = "There was an error saving the Medical Record";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
-        
+
         public async override Task<OperationResult> Update(MedicalRecords entity)
         {
             OperationResult operationResult = new();
@@ -67,7 +67,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = true;
                 operationResult.Message = "There was an error updating the Medical Record";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -88,11 +88,11 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 medicalRecords.IsActive = false;
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 operationResult.Success = true;
                 operationResult.Message = "There was an error updating the Medical Record";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -126,7 +126,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaing the medical records";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
@@ -168,7 +168,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaing the medical records";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }

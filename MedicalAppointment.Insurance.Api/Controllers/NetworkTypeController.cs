@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using MedicalAppointments.Persistance.Interfaces.Appointment;
+using MedicalAppointments.Persistance.Interfaces.Insurance;
+using MedicalAppointments.Persistance.Repositories.Appointments;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointment.Insurance.Api.Controllers
 {
@@ -8,33 +9,37 @@ namespace MedicalAppointment.Insurance.Api.Controllers
     [ApiController]
     public class NetworkTypeController : ControllerBase
     {
-        // GET: api/<NetworkTypeController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly INetworkTypeRepository _networkTypeRepository;
+        public NetworkTypeController(INetworkTypeRepository networkTypeRepository) => _networkTypeRepository = networkTypeRepository;
+
+        [HttpGet("GetNetworkType")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _networkTypeRepository.GetAll();
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // GET api/<NetworkTypeController>/5
-        [HttpGet("{id}")]
+        [HttpGet("G")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<NetworkTypeController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<NetworkTypeController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<NetworkTypeController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

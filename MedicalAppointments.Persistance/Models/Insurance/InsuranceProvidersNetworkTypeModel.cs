@@ -1,4 +1,4 @@
-﻿namespace MedicalAppointments.Persistance.Models
+﻿namespace MedicalAppointments.Persistance.Models.Insurance
 {
     public class InsuranceProvidersNetworkTypeModel
     {

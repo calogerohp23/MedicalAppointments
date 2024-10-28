@@ -1,8 +1,6 @@
 ﻿using MedicalAppointments.Persistance.Interfaces.Appointment;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MedicalAppointment.Appointment.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -10,10 +8,7 @@ namespace MedicalAppointment.Appointment.Api.Controllers
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentRepository _appointmentRepository;
-        public AppointmentController(IAppointmentRepository appointmentRepository)
-        {
-            _appointmentRepository = appointmentRepository;
-        }
+        public AppointmentController(IAppointmentRepository appointmentRepository) => _appointmentRepository = appointmentRepository;
 
         [HttpGet("GetAppointments")]
         public async Task<IActionResult> Get()
@@ -27,29 +22,48 @@ namespace MedicalAppointment.Appointment.Api.Controllers
             return Ok(result);
         }
 
-        // GET api/<AppointmentController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetAppointmentByID")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _appointmentRepository.GetEntityBy(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // POST api/<AppointmentController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveAppointment")]
+        public async Task<IActionResult> Post([FromBody] MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
         {
+            var result = await _appointmentRepository.Save(appointment);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        
+        [HttpPut("UpdateAppointment")]
+        public async Task<IActionResult> Put([FromBody] MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
+        {
+            var result = await _appointmentRepository.Update(appointment);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // PUT api/<AppointmentController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpDelete("Disable Appointment")]
+        public async Task<IActionResult> Disable(MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
         {
-        }
-
-        // DELETE api/<AppointmentController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var result = await _appointmentRepository.Remove(appointment);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }
