@@ -9,15 +9,15 @@ namespace MedicalAppointments.Persistance.Base
     public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
-        private DbSet<TEntity> entities;
+        private readonly DbSet<TEntity> _entities;
         public BaseRepository(MedicalAppointmentContext medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
-            this.entities = _medicalAppointmentContext.Set<TEntity>();
+            _entities = _medicalAppointmentContext.Set<TEntity>();
         }
         public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> filter)
         {
-            return await this.entities.AnyAsync(filter);
+            return await _entities.AnyAsync(filter);
         }
 
         public virtual async Task<OperationResult> GetAll()
@@ -25,7 +25,7 @@ namespace MedicalAppointments.Persistance.Base
             OperationResult result = new();
             try
             {
-                var data = await this.entities.ToListAsync();
+                var data = await _entities.ToListAsync();
                 result.Data = data;
             }
             catch (Exception ex)
@@ -41,7 +41,7 @@ namespace MedicalAppointments.Persistance.Base
             OperationResult operationResult = new();
             try
             {
-                var data = await this.entities.Where(filter).ToListAsync();
+                var data = await _entities.Where(filter).ToListAsync();
                 operationResult.Data = data;
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace MedicalAppointments.Persistance.Base
             OperationResult result = new();
             try
             {
-                var entity = await this.entities.FindAsync(id);
+                var entity = await _entities.FindAsync(id);
                 result.Data = entity;
             }
             catch (Exception ex)
@@ -73,7 +73,7 @@ namespace MedicalAppointments.Persistance.Base
             OperationResult result = new();
             try
             {
-                entities.Remove(entity);
+                _entities.Remove(entity);
                 await _medicalAppointmentContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -89,7 +89,7 @@ namespace MedicalAppointments.Persistance.Base
             OperationResult result = new();
             try
             {
-                entities.Add(entity);
+                _entities.Add(entity);
                 await _medicalAppointmentContext.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
@@ -105,7 +105,7 @@ namespace MedicalAppointments.Persistance.Base
             OperationResult result = new();
             try
             {
-                entities.Update(entity);
+                _entities.Update(entity);
                 await _medicalAppointmentContext.SaveChangesAsync();
             }
             catch (Exception ex)

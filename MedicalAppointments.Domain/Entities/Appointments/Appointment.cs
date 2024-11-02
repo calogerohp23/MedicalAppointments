@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.Appointments
     public sealed class Appointment: Base.BaseEntity
     {
         [Key]
-        public int AppointmentID {  get; set; }
+        public int AppointmentID {  get; private set; }
         public int PatientID { get; set; }
         public int DoctorID {  get; set; }
         public DateTime AppointmentDate {  get; set; }

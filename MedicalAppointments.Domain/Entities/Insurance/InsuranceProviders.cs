@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.Insurance
     public sealed class InsuranceProviders : Base.BaseEntity
     {
         [Key]
-        public int InsuranceProviderID { get; set; }
+        public int InsuranceProviderID { get; private set; }
         public string? Name { get; set; }
         public string? ContactNumber { get; set; }
         public string? Email { get; set; }

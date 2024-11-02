@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.Medical
     public sealed class MedicalRecords : Base.BaseEntity
     {
         [Key]
-        public int RecordId { get; set; }
+        public int RecordId { get; private set; }
         public int PatientID { get; set; }
         public int DoctorID { get; set; }
         public string? Diagnosis { get; set; }

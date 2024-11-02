@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.Insurance
     public sealed class NetworkType : Base.BaseEntity
     {
         [Key]
-        public int NetworkTypeID { get; set; }
+        public int NetworkTypeID { get; private set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
     }

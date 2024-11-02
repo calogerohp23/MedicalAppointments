@@ -31,7 +31,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             }
             try
             {
-                await base.Save(entity);
+                var result = await base.Save(entity);
             }
             catch (Exception ex)
             {

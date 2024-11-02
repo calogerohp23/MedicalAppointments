@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.Medical
     public sealed class AvailabilityModes : Base.BaseEntity
     {
         [Key]
-        public int SAvailabilityModeID { get; set; }
+        public int SAvailabilityModeID { get; private set; }
         public string? AvailabilityMode { get; set; }
 
     }

@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.System
     public sealed class Roles:Base.BaseEntity
     {
         [Key]
-        public int RoleID { get; set; }
+        public int RoleID { get; private set; }
         public string? RoleName { get; set;}
 
     }

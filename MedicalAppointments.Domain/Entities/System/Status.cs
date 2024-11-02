@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.System
     public sealed class Status
     {
         [Key]
-        public int StatusId {  get; set; }
+        public int StatusId {  get; private set; }
         public string StatusName { get; set; }
     }
 }

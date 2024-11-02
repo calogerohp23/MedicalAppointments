@@ -7,7 +7,7 @@ namespace MedicalAppointments.Domain.Entities.System
     public sealed class Notifications
     {
         [Key]
-        public int NotificationId {  get; set; }
+        public int NotificationId {  get; private set; }
         public int UserId {  get; set; }
         public string? Message {  get; set; }
         public DateTime? SentAt { get; set; }

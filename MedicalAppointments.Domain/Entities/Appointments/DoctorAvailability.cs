@@ -8,7 +8,7 @@ namespace MedicalAppointments.Domain.Entities.Appointments
     public sealed class DoctorAvailability : BaseEntity
     {
         [Key]
-        public int AvailabilityId { get; set; }
+        public int AvailabilityId { get; private set; }
         public int DoctorID { get; set; }
         public DateTime AvailableDate { get; set; }
         public TimeOnly StartTime {  get; set; }
