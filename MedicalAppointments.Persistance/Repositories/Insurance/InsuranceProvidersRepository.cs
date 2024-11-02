@@ -14,18 +14,15 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<InsuranceProvidersRepository> logger;
-        private readonly ValidatorBase _validator;
 
-        public InsuranceProvidersRepository(MedicalAppointmentContext medicalAppointmentContext, ValidatorBase validator, ILogger<InsuranceProvidersRepository> logger) : base(medicalAppointmentContext)
+        public InsuranceProvidersRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<InsuranceProvidersRepository> logger) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
-            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(InsuranceProviders entity)
         {
-<<<<<<< Updated upstream
             OperationResult operationResult = new();
 
             if (entity == null)
@@ -34,12 +31,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 operationResult.Message = "The entity is null";
                 return operationResult;
             }
-=======
-            OperationResult operationResult = new OperationResult();
-            _validator.EntitityNull(entity);
-            _validator.EqualOrLessThanZero(entity.NetworkTypeID,"NetworkTypeID");
 
->>>>>>> Stashed changes
+
             try
             {
                 operationResult = await base.Save(entity);

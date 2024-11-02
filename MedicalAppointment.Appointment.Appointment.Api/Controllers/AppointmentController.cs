@@ -55,7 +55,7 @@ namespace MedicalAppointment.Appointment.Api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("Disable Appointment")]
+        [HttpDelete("DisableAppointment")]
         public async Task<IActionResult> Disable(MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
         {
             var result = await _appointmentRepository.Remove(appointment);

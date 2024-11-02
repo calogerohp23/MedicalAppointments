@@ -12,17 +12,14 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
     public class DoctorAvailabilityRepository : BaseRepository<DoctorAvailability>, IDoctorAvailabilityRepository
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
-        private readonly ValidatorBase _validator;
         private readonly ILogger<DoctorAvailabilityRepository> logger;
-        public DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext,ValidatorBase validator, ILogger<DoctorAvailabilityRepository> logger) : base(medicalAppointmentContext)
+        public DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorAvailabilityRepository> logger) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
-            _validator = validator;
             this.logger = logger;
         }
         public async override Task<OperationResult> Save(DoctorAvailability entity)
         {
-<<<<<<< Updated upstream
             OperationResult operationResult = new();
             if (entity == null)
             {
@@ -48,14 +45,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 operationResult.Message = "The doctor availability time is already registered.";
                 return operationResult;
             }
-=======
-            OperationResult operationResult = new OperationResult();
-            _validator.EntitityNull(entity);
-            _validator.TimeLessOrEqualThan(entity.StartTime,entity.EndTime,"The end time is earlier than the start time.");
-            _validator.EqualOrLessThanZero(entity.AvailabilityId, "AvailabilityID");
-            _validator.EqualOrLessThanZero(entity.DoctorID, "DoctorID");
-            _validator.False(entity.IsActive,"The doctor availability is not longer active").
->>>>>>> Stashed changes
             try
             {
                 entity.IsActive = true;

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalAppointments.Domain.Entities.System;
+using MedicalAppointments.Persistance.Interfaces.System;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +10,57 @@ namespace MedicalAppointment.System.Api.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
-        // GET: api/<StatusController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IStatusRepository _statusRepository;
+        public StatusController(IStatusRepository statusRepository) => _statusRepository = statusRepository;
+        [HttpGet("GetRoles")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _statusRepository.GetAll();
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
-
-        // GET api/<StatusController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetRolesByID")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _statusRepository.GetEntityBy(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
-
-        // POST api/<StatusController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveRoles")]
+        public async Task<IActionResult> Post([FromBody] Status status)
         {
+            var result = await _statusRepository.Save(status);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
-
-        // PUT api/<StatusController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateRoles")]
+        public async Task<IActionResult> Put([FromBody] Status status)
         {
+            var result = await _statusRepository.Update(status);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
-
-        // DELETE api/<StatusController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("DisableRoles")]
+        public async Task<IActionResult> Disable(Status status)
         {
+            var result = await _statusRepository.Remove(status);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

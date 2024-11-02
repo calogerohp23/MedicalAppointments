@@ -92,7 +92,7 @@ namespace MedicalAppointments.Persistance.Base
                 entities.Add(entity);
                 await _medicalAppointmentContext.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
                 result.Success = false;
                 result.Message = $"An error has ocurred {ex.Message} saving the entity.";
