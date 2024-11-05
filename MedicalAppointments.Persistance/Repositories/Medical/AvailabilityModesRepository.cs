@@ -53,8 +53,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(entity.SAvailabilityModeID);
-                availabilityModesToUpdate.SAvailabilityModeID = entity.SAvailabilityModeID;
+                AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(entity.SAvailabilityModeID);  
                 availabilityModesToUpdate.AvailabilityMode = entity.AvailabilityMode;
                 availabilityModesToUpdate.UpdatedAt = entity.UpdatedAt;
                 availabilityModesToUpdate.UpdatedBy = entity.UpdatedBy;

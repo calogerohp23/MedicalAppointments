@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalAppointments.Domain.Entities.System;
+using MedicalAppointments.Domain.Entities.Users;
+using MedicalAppointments.Persistance.Interfaces.Users;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -7,37 +10,64 @@ namespace MedicalAppointment.Users.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
-    {
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+    {       
+       
+        private readonly IUsersRepository _usersRepository;
+        public UsersController(IUsersRepository usersRepository) => _usersRepository = usersRepository;
+        [HttpGet("GetUsers")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _usersRepository.GetAll();
+
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetUsersByID")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _usersRepository.GetEntityBy(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // POST api/<UsersController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveUsers")]
+        public async Task<IActionResult> Post([FromBody] MedicalAppointments.Domain.Entities.Users.Users users)
         {
+            var result = await _usersRepository.Save(users);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateUsers")]
+        public async Task<IActionResult> Put([FromBody] MedicalAppointments.Domain.Entities.Users.Users users)
         {
+            var result = await _usersRepository.Update(users);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("DisableUsers")]
+        public async Task<IActionResult> Disable(MedicalAppointments.Domain.Entities.Users.Users users)
         {
+            var result = await _usersRepository.Remove(users);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }
