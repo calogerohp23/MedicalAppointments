@@ -42,7 +42,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(AvailabilityModes entity)
+        public async override Task<OperationResult> Update(int id, AvailabilityModes entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -53,7 +53,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(entity.SAvailabilityModeID);  
+                AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(id);  
                 availabilityModesToUpdate.AvailabilityMode = entity.AvailabilityMode;
                 availabilityModesToUpdate.UpdatedAt = entity.UpdatedAt;
                 availabilityModesToUpdate.UpdatedBy = entity.UpdatedBy;
@@ -68,7 +68,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(AvailabilityModes entity)
+        public async override Task<OperationResult> Remove(int id, AvailabilityModes entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -79,7 +79,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                AvailabilityModes? availabilityModesToRemove = await _medicalAppointmentContext.AvailabilityModes.FindAsync(entity.SAvailabilityModeID);
+                AvailabilityModes? availabilityModesToRemove = await _medicalAppointmentContext.AvailabilityModes.FindAsync(id);
                 availabilityModesToRemove.IsActive = false;
                 availabilityModesToRemove.UpdatedAt = entity.UpdatedAt;
                 availabilityModesToRemove.UpdatedBy = entity.UpdatedBy;

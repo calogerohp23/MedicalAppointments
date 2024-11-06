@@ -3,7 +3,6 @@ using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Appointment;
-using MedicalAppointments.Persistance.Models;
 using MedicalAppointments.Persistance.Models.Appointments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -77,7 +76,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(Appointment entity)
+        public async override Task<OperationResult> Update(int id, Appointment entity)
         {
             OperationResult operationResult = new();
 
@@ -111,7 +110,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             try
             {
-                Appointment? appointmentToUpdate = await _medicalAppointmentContext.Appointments.FindAsync(entity.AppointmentID);
+                Appointment? appointmentToUpdate = await _medicalAppointmentContext.Appointments.FindAsync(id);
                 appointmentToUpdate.PatientID = entity.PatientID;
                 appointmentToUpdate.DoctorID = entity.DoctorID;
                 appointmentToUpdate.AppointmentDate = entity.AppointmentDate;
@@ -129,7 +128,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(Appointment entity)
+        public async override Task<OperationResult> Remove(int id,Appointment entity)
         {
             OperationResult operationResult = new();
             // se repite
@@ -155,7 +154,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             try
             {
-                Appointment? appointmentToRemove = await _medicalAppointmentContext.Appointments.FindAsync(entity.AppointmentID);
+                Appointment? appointmentToRemove = await _medicalAppointmentContext.Appointments.FindAsync(int id);
                 appointmentToRemove.StatusID = 2;
                 appointmentToRemove.UpdatedAt = entity.UpdatedAt;
                 appointmentToRemove.UpdatedBy = entity.UpdatedBy;

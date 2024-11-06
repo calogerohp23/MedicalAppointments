@@ -42,7 +42,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(Specialities entity)
+        public async override Task<OperationResult> Update(int id, Specialities entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -53,7 +53,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                Specialities? specialtiesToUpdate = await _medicalAppointmentContext.Specialities.FindAsync(entity.SpecialtyID);
+                Specialities? specialtiesToUpdate = await _medicalAppointmentContext.Specialities.FindAsync(id);
                 specialtiesToUpdate.SpecialtyName = entity.SpecialtyName;
                 specialtiesToUpdate.CreatedAt = entity.CreatedAt;
                 specialtiesToUpdate.CreatedBy = entity.CreatedBy;
@@ -70,7 +70,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(Specialities entity)
+        public async override Task<OperationResult> Remove(int id, Specialities entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -81,7 +81,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                Specialities? specialtiesToRemove = await _medicalAppointmentContext.Specialities.FindAsync(entity.SpecialtyID);
+                Specialities? specialtiesToRemove = await _medicalAppointmentContext.Specialities.FindAsync(id);
                 specialtiesToRemove.SpecialtyName = entity.SpecialtyName;
                 specialtiesToRemove.CreatedAt = entity.CreatedAt;
                 specialtiesToRemove.CreatedBy = entity.CreatedBy;

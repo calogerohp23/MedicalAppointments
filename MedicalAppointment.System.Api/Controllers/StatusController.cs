@@ -12,7 +12,7 @@ namespace MedicalAppointment.System.Api.Controllers
     {
         private readonly IStatusRepository _statusRepository;
         public StatusController(IStatusRepository statusRepository) => _statusRepository = statusRepository;
-        [HttpGet("GetRoles")]
+        [HttpGet("GetStatus")]
         public async Task<IActionResult> Get()
         {
             var result = await _statusRepository.GetAll();
@@ -22,7 +22,7 @@ namespace MedicalAppointment.System.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("GetRolesByID")]
+        [HttpGet("GetStatusByID")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _statusRepository.GetEntityBy(id);
@@ -32,7 +32,7 @@ namespace MedicalAppointment.System.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpPost("SaveRoles")]
+        [HttpPost("SaveStatus")]
         public async Task<IActionResult> Post([FromBody] Status status)
         {
             var result = await _statusRepository.Save(status);
@@ -42,7 +42,7 @@ namespace MedicalAppointment.System.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpPut("UpdateRoles")]
+        [HttpPut("UpdateStatus")]
         public async Task<IActionResult> Put([FromBody] Status status)
         {
             var result = await _statusRepository.Update(status);
@@ -52,7 +52,7 @@ namespace MedicalAppointment.System.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("DisableRoles")]
+        [HttpDelete("DisableStatus")]
         public async Task<IActionResult> Disable(Status status)
         {
             var result = await _statusRepository.Remove(status);

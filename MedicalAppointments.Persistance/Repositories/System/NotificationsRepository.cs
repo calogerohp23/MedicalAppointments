@@ -42,12 +42,12 @@ namespace MedicalAppointments.Persistance.Repositories.System
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(Notifications entity)
+        public async override Task<OperationResult> Update(int id, Notifications entity)
         {
             OperationResult operationResult = new();
             try
             {
-                Notifications? notificationsToUpdate = await _medicalAppointmentContext.Notifications.FindAsync(entity.NotificationId);
+                Notifications? notificationsToUpdate = await _medicalAppointmentContext.Notifications.FindAsync(id);
                 notificationsToUpdate.UserId = entity.UserId;
                 notificationsToUpdate.Message = entity.Message;
                 notificationsToUpdate.SentAt = entity.SentAt;
@@ -61,12 +61,12 @@ namespace MedicalAppointments.Persistance.Repositories.System
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(Notifications entity)
+        public async override Task<OperationResult> Remove(int id, Notifications entity)
         {
             OperationResult operationResult = new();
             try
             {
-                Notifications? notificationsToRemove = await _medicalAppointmentContext.Notifications.FindAsync(entity.NotificationId);
+                Notifications? notificationsToRemove = await _medicalAppointmentContext.Notifications.FindAsync(id);
                 notificationsToRemove.UserId = entity.UserId;
                 notificationsToRemove.Message = entity.Message;
                 notificationsToRemove.SentAt = entity.SentAt;

@@ -42,7 +42,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(Status entity)
+        public async override Task<OperationResult> Update(int id, Status entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -53,7 +53,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             }
             try
             {
-                Status? statusToUpdate = await _medicalAppointmentContext.Status.FindAsync(entity.StatusId);
+                Status? statusToUpdate = await _medicalAppointmentContext.Status.FindAsync(id);
                 statusToUpdate.StatusName = entity.StatusName;
 
             }
@@ -66,7 +66,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(Status entity)
+        public async override Task<OperationResult> Remove(int id, Status entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -77,7 +77,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             }
             try
             {
-                Status? statusToRemove = await _medicalAppointmentContext.Status.FindAsync(entity.StatusId);
+                Status? statusToRemove = await _medicalAppointmentContext.Status.FindAsync(id);
                 statusToRemove.StatusName = entity.StatusName;
             }
             catch (Exception ex)

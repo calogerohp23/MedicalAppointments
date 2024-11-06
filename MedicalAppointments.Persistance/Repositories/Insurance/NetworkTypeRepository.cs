@@ -43,7 +43,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(NetworkType entity)
+        public async override Task<OperationResult> Update(int id, NetworkType entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -54,15 +54,13 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             }
             try
             {
-                NetworkType? networkTypeToUpdate = await _medicalAppointmentContext.NetworkType.FindAsync(entity.NetworkTypeID);
+                NetworkType? networkTypeToUpdate = await _medicalAppointmentContext.NetworkType.FindAsync(id);
 
                 networkTypeToUpdate.Name = entity.Name;
                 networkTypeToUpdate.Description = entity.Description;
                 networkTypeToUpdate.UpdatedAt = entity.UpdatedAt;
                 networkTypeToUpdate.IsActive = entity.IsActive;
                 networkTypeToUpdate.UpdatedBy = entity.UpdatedBy;
-
-                await base.Update(entity);
             }
             catch (Exception ex)
             {
@@ -74,7 +72,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(NetworkType entity)
+        public async override Task<OperationResult> Remove(int id, NetworkType entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -85,7 +83,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             }
             try
             {
-                NetworkType? networkTypeToRemove = await _medicalAppointmentContext.NetworkType.FindAsync(entity.NetworkTypeID);
+                NetworkType? networkTypeToRemove = await _medicalAppointmentContext.NetworkType.FindAsync(id);
 
                 networkTypeToRemove.IsActive = false;
                 networkTypeToRemove.UpdatedAt = entity.UpdatedAt;

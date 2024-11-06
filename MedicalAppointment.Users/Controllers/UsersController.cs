@@ -49,9 +49,17 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpPut("UpdateUsers")]
-        public async Task<IActionResult> Put([FromBody] MedicalAppointments.Domain.Entities.Users.Users users)
+        public async Task<IActionResult> Put(int id,[FromBody] MedicalAppointments.Domain.Entities.Users.Users users)
         {
             var result = await _usersRepository.Update(users);
+            if (id != users.UserID)
+            {
+                ModelState.AddModelError("Id", "Invalid Id");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -60,7 +68,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpDelete("DisableUsers")]
-        public async Task<IActionResult> Disable(MedicalAppointments.Domain.Entities.Users.Users users)
+        public async Task<IActionResult> Disable(int id,MedicalAppointments.Domain.Entities.Users.Users users)
         {
             var result = await _usersRepository.Remove(users);
             if (!result.Success)

@@ -45,7 +45,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             }
             return operationResult;
         }
-        public async override Task<OperationResult> Update(InsuranceProviders entity)
+        public async override Task<OperationResult> Update(int id, InsuranceProviders entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -56,7 +56,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             }
             try
             {
-                InsuranceProviders? insuranceProvidersToUpdate = await _medicalAppointmentContext.InsuranceProviders.FindAsync(entity.InsuranceProviderID);
+                InsuranceProviders? insuranceProvidersToUpdate = await _medicalAppointmentContext.InsuranceProviders.FindAsync(id);
                 insuranceProvidersToUpdate.Name = entity.Name;
                 insuranceProvidersToUpdate.ContactNumber = entity.ContactNumber;
                 insuranceProvidersToUpdate.Email = entity.Email;
@@ -86,7 +86,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(InsuranceProviders entity)
+        public async override Task<OperationResult> Remove(int id, InsuranceProviders entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -97,7 +97,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             }
             try
             {
-                InsuranceProviders? insuranceProvidersToRemove = await _medicalAppointmentContext.InsuranceProviders.FindAsync(entity.InsuranceProviderID);
+                InsuranceProviders? insuranceProvidersToRemove = await _medicalAppointmentContext.InsuranceProviders.FindAsync(id);
                 insuranceProvidersToRemove.IsActive = false;
                 insuranceProvidersToRemove.UpdatedAt = entity.UpdatedAt;
                 insuranceProvidersToRemove.UpdatedBy = entity.UpdatedBy;

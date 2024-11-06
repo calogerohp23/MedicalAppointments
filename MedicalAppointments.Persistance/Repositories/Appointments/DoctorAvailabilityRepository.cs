@@ -59,7 +59,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
             return operationResult;
         }
-        public async override Task<OperationResult> Update(DoctorAvailability entity)
+        public async override Task<OperationResult> Update(int id,DoctorAvailability entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -82,7 +82,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             try
             {
-                DoctorAvailability? doctorAvailabilityToUpdate = await _medicalAppointmentContext.DoctorAvailability.FindAsync(entity.AvailabilityId);
+                DoctorAvailability? doctorAvailabilityToUpdate = await _medicalAppointmentContext.DoctorAvailability.FindAsync(id);
                 doctorAvailabilityToUpdate.DoctorID = entity.DoctorID;
                 doctorAvailabilityToUpdate.AvailableDate = entity.AvailableDate;
                 doctorAvailabilityToUpdate.StartTime = entity.StartTime;
@@ -91,8 +91,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 doctorAvailabilityToUpdate.UpdatedAt = entity.UpdatedAt;
                 doctorAvailabilityToUpdate.CreatedBy = entity.CreatedBy;
                 doctorAvailabilityToUpdate.UpdatedBy = entity.UpdatedBy;
-
-                await base.Update(doctorAvailabilityToUpdate);
             }
             catch (Exception ex)
             {
@@ -102,7 +100,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             return operationResult;
         }
-        public async override Task<OperationResult> Remove(DoctorAvailability entity)
+        public async override Task<OperationResult> Remove(int id, DoctorAvailability entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -114,12 +112,11 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             try
             {
-                DoctorAvailability? doctorAvailabilityToRemove = await _medicalAppointmentContext.DoctorAvailability.FindAsync(entity.AvailabilityId);
+                DoctorAvailability? doctorAvailabilityToRemove = await _medicalAppointmentContext.DoctorAvailability.FindAsync(id);
                 doctorAvailabilityToRemove.IsActive = false;
                 doctorAvailabilityToRemove.UpdatedAt = entity.UpdatedAt;
                 doctorAvailabilityToRemove.UpdatedBy = entity.UpdatedBy;
 
-                await base.Update(doctorAvailabilityToRemove);
             }
             catch (Exception ex)
             {

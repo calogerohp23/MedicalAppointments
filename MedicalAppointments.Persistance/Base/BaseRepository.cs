@@ -1,4 +1,5 @@
-﻿using MedicalAppointments.Domain.Repositories;
+﻿using MedicalAppointments.Domain.Entities.Appointments;
+using MedicalAppointments.Domain.Repositories;
 using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Context;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +69,7 @@ namespace MedicalAppointments.Persistance.Base
             return result;
         }
 
-        public virtual async Task<OperationResult> Remove(TEntity entity)
+        public virtual async Task<OperationResult> Remove(int id, TEntity entity)
         {
             OperationResult result = new();
             try
@@ -100,7 +101,7 @@ namespace MedicalAppointments.Persistance.Base
             return result;
         }
 
-        public virtual async Task<OperationResult> Update(TEntity entity)
+        public virtual async Task<OperationResult> Update(int id, TEntity entity)
         {
             OperationResult result = new();
             try
@@ -115,7 +116,5 @@ namespace MedicalAppointments.Persistance.Base
             }
             return result;
         }
-
-
     }
 }

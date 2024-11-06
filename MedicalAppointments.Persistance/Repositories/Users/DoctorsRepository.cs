@@ -48,12 +48,12 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(Doctors entity)
+        public async override Task<OperationResult> Update(int id, Doctors entity)
         {
             OperationResult operationResult = new();
             try
             {
-                Doctors? doctorsToUpdate = await _medicalAppointmentContext.Doctors.FindAsync(entity.DoctorID);
+                Doctors? doctorsToUpdate = await _medicalAppointmentContext.Doctors.FindAsync(id);
                 doctorsToUpdate.SpecialtyId = entity.SpecialtyId;
                 doctorsToUpdate.UserID = entity.UserID;
                 doctorsToUpdate.LicenseNumber = entity.LicenseNumber;
@@ -77,12 +77,12 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(Doctors entity)
+        public async override Task<OperationResult> Remove(int id, Doctors entity)
         {
             OperationResult operationResult = new();
             try
             {
-                Doctors? doctorsToRemove = await _medicalAppointmentContext.Doctors.FindAsync(entity.DoctorID);
+                Doctors? doctorsToRemove = await _medicalAppointmentContext.Doctors.FindAsync(id);
                 doctorsToRemove.IsActive = false;
                 doctorsToRemove.UpdatedAt = entity.UpdatedAt;
                 doctorsToRemove.UpdatedBy = entity.UpdatedBy;

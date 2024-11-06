@@ -42,7 +42,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(MedicalRecords entity)
+        public async override Task<OperationResult> Update(int id, MedicalRecords entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -53,7 +53,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                MedicalRecords? medicalRecords = await _medicalAppointmentContext.MedicalRecords.FindAsync(entity.RecordId);
+                MedicalRecords? medicalRecords = await _medicalAppointmentContext.MedicalRecords.FindAsync(id);
                 medicalRecords.PatientID = entity.PatientID;
                 medicalRecords.DoctorID = entity.DoctorID;
                 medicalRecords.Diagnosis = entity.Diagnosis;
@@ -71,7 +71,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             return operationResult;
         }
-        public async override Task<OperationResult> Remove(MedicalRecords entity)
+        public async override Task<OperationResult> Remove(int id, MedicalRecords entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -82,7 +82,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                MedicalRecords? medicalRecords = await _medicalAppointmentContext.MedicalRecords.FindAsync(entity.RecordId);
+                MedicalRecords? medicalRecords = await _medicalAppointmentContext.MedicalRecords.FindAsync(id);
                 medicalRecords.UpdatedAt = entity.UpdatedAt;
                 medicalRecords.UpdatedBy = entity.UpdatedBy;
                 medicalRecords.IsActive = false;

@@ -42,7 +42,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(Roles entity)
+        public async override Task<OperationResult> Update(int id, Roles entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -53,7 +53,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             }
             try
             {
-                Roles? rolesToUpdate = await _medicalAppointmentContext.Roles.FindAsync(entity.RoleID);
+                Roles? rolesToUpdate = await _medicalAppointmentContext.Roles.FindAsync(id);
                 rolesToUpdate.RoleName = entity.RoleName;
                 rolesToUpdate.CreatedAt = entity.CreatedAt;
                 rolesToUpdate.CreatedBy = entity.CreatedBy;
@@ -70,7 +70,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(Roles entity)
+        public async override Task<OperationResult> Remove(int id, Roles entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -81,7 +81,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
             }
             try
             {
-                Roles? rolesToRemove = await _medicalAppointmentContext.Roles.FindAsync(entity.RoleID);
+                Roles? rolesToRemove = await _medicalAppointmentContext.Roles.FindAsync(id);
                 rolesToRemove.RoleName = entity.RoleName;
                 rolesToRemove.UpdatedAt = entity.UpdatedAt;
                 rolesToRemove.UpdatedBy = entity.UpdatedBy;
