@@ -56,6 +56,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                 patientsToUpdate.CreatedBy = entity.CreatedBy;
                 patientsToUpdate.IsActive = entity.IsActive;
                 patientsToUpdate.UserID = entity.UserID;
+                await _medicalAppointmentContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -75,6 +76,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                 patientsToRemove.IsActive = false;
                 patientsToRemove.UpdatedAt = entity.UpdatedAt;
                 patientsToRemove.UpdatedBy = entity.UpdatedBy;
+                await _medicalAppointmentContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

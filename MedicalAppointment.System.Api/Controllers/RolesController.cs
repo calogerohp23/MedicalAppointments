@@ -43,9 +43,9 @@ namespace MedicalAppointment.System.Api.Controllers
             return Ok(result);
         }
         [HttpPut("UpdateRoles")]
-        public async Task<IActionResult> Put([FromBody] Roles roles)
+        public async Task<IActionResult> Put(int id, [FromBody] Roles roles)
         {
-            var result = await _rolesRepository.Update(roles);
+            var result = await _rolesRepository.Update(id, roles);
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -53,9 +53,9 @@ namespace MedicalAppointment.System.Api.Controllers
             return Ok(result);
         }
         [HttpDelete("DisableRoles")]
-        public async Task<IActionResult> Disable(Roles roles)
+        public async Task<IActionResult> Disable(int id, [FromBody] Roles roles)
         {
-            var result = await _rolesRepository.Remove(roles);
+            var result = await _rolesRepository.Remove(id, roles);
             if (!result.Success)
             {
                 return BadRequest(result);

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MedicalAppointments.Domain.Entities.Medical;
+using MedicalAppointments.Persistance.Interfaces.Medical;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -6,38 +8,62 @@ namespace MedicalAppointment.Medical.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AvailabilityModesController : ControllerBase
+    public class AvailabilityModesController(IAvailabilityModesRepository availabilityModesRepository) : ControllerBase
     {
-        // GET: api/<AvailabilityModesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IAvailabilityModesRepository _availabilityModesRepository = availabilityModesRepository;
+        [HttpGet("GetAvailabilityModes")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _availabilityModesRepository.GetAll();
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // GET api/<AvailabilityModesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetAvailabilityModesByID")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _availabilityModesRepository.GetEntityBy(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // POST api/<AvailabilityModesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveAvailabilityModes")]
+        public async Task<IActionResult> Post([FromBody] AvailabilityModes availabilityModes)
         {
+            var result = await _availabilityModesRepository.Save(availabilityModes);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // PUT api/<AvailabilityModesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateAvailabilityModes")]
+        public async Task<IActionResult> Put(int id, [FromBody] AvailabilityModes availabilityModes)
         {
+            var result = await _availabilityModesRepository.Update(id, availabilityModes);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // DELETE api/<AvailabilityModesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("DisableAvailabilityModes")]
+        public async Task<IActionResult> Delete(int id, [FromBody] AvailabilityModes availabilityModes)
         {
+            var result = await _availabilityModesRepository.Remove(id, availabilityModes);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

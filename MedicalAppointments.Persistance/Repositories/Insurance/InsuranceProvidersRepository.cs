@@ -31,10 +31,11 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 operationResult.Message = "The entity is null";
                 return operationResult;
             }
-
-
             try
             {
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
+
                 operationResult = await base.Save(entity);
             }
             catch (Exception ex)
@@ -73,14 +74,19 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 insuranceProvidersToUpdate.CustomerSupportContact = entity.CustomerSupportContact;
                 insuranceProvidersToUpdate.AcceptedRegions = entity.AcceptedRegions;
                 insuranceProvidersToUpdate.MaxCoverageAmount = entity.MaxCoverageAmount;
-                insuranceProvidersToUpdate.UpdatedAt = entity.UpdatedAt;
+                insuranceProvidersToUpdate.UpdatedAt = DateTime.Now;
                 insuranceProvidersToUpdate.IsActive = entity.IsActive;
                 insuranceProvidersToUpdate.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+
+                operationResult.Success = true;
+                operationResult.Message = "The insurance provider was successfully updated!";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error updating the Insurance provider.";
+                operationResult.Message = "There was an error updating the insurance provider.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -99,13 +105,18 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 InsuranceProviders? insuranceProvidersToRemove = await _medicalAppointmentContext.InsuranceProviders.FindAsync(id);
                 insuranceProvidersToRemove.IsActive = false;
-                insuranceProvidersToRemove.UpdatedAt = entity.UpdatedAt;
+                insuranceProvidersToRemove.UpdatedAt = DateTime.Now;
                 insuranceProvidersToRemove.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+
+                operationResult.Success = true;
+                operationResult.Message = "The insurance provider was successfully disabled!";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error removing the Insurance provider.";
+                operationResult.Message = "There was an error removing the insurance provider.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -159,7 +170,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
-            if(id == 0)
+            if (id == 0)
             {
                 operationResult.Success = false;
                 operationResult.Message = "The insurance provider does not exist";
@@ -197,6 +208,11 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
                                               }).AsNoTracking()
                                             .ToListAsync();
+                if(operationResult.Data == null)
+                {
+                    operationResult.Success = false;
+                    operationResult.Message = "The ID provided does not exist in the Database.";
+                }
             }
             catch (Exception ex)
             {

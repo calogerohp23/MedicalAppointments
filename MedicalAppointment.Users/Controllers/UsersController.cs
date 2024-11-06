@@ -1,6 +1,4 @@
-﻿using MedicalAppointments.Domain.Entities.System;
-using MedicalAppointments.Domain.Entities.Users;
-using MedicalAppointments.Persistance.Interfaces.Users;
+﻿using MedicalAppointments.Persistance.Interfaces.Users;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,11 +7,11 @@ namespace MedicalAppointment.Users.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(IUsersRepository usersRepository) : ControllerBase
     {       
        
-        private readonly IUsersRepository _usersRepository;
-        public UsersController(IUsersRepository usersRepository) => _usersRepository = usersRepository;
+        private readonly IUsersRepository _usersRepository = usersRepository;
+
         [HttpGet("GetUsers")]
         public async Task<IActionResult> Get()
         {
@@ -51,15 +49,8 @@ namespace MedicalAppointment.Users.Api.Controllers
         [HttpPut("UpdateUsers")]
         public async Task<IActionResult> Put(int id,[FromBody] MedicalAppointments.Domain.Entities.Users.Users users)
         {
-            var result = await _usersRepository.Update(users);
-            if (id != users.UserID)
-            {
-                ModelState.AddModelError("Id", "Invalid Id");
-            }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+
+            var result = await _usersRepository.Update(id,users);
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -70,7 +61,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         [HttpDelete("DisableUsers")]
         public async Task<IActionResult> Disable(int id,MedicalAppointments.Domain.Entities.Users.Users users)
         {
-            var result = await _usersRepository.Remove(users);
+            var result = await _usersRepository.Remove(id, users);
             if (!result.Success)
             {
                 return BadRequest(result);

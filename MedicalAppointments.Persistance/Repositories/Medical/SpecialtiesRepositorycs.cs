@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace MedicalAppointments.Persistance.Repositories.Medical
 {
-    public class SpecialtiesRepositroy : BaseRepository<Specialities>, ISpecialtiesRepository
+    public class SpecialtiesRepositroy : BaseRepository<Specialties>, ISpecialtiesRepository
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<SpecialtiesRepositroy> logger;
@@ -20,7 +20,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             this.logger = logger;
         }
 
-        public async override Task<OperationResult> Save(Specialities entity)
+        public async override Task<OperationResult> Save(Specialties entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -42,7 +42,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(int id, Specialities entity)
+        public async override Task<OperationResult> Update(int id, Specialties entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -53,7 +53,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                Specialities? specialtiesToUpdate = await _medicalAppointmentContext.Specialities.FindAsync(id);
+                Specialties? specialtiesToUpdate = await _medicalAppointmentContext.Specialities.FindAsync(id);
                 specialtiesToUpdate.SpecialtyName = entity.SpecialtyName;
                 specialtiesToUpdate.CreatedAt = entity.CreatedAt;
                 specialtiesToUpdate.CreatedBy = entity.CreatedBy;
@@ -70,7 +70,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(int id, Specialities entity)
+        public async override Task<OperationResult> Remove(int id, Specialties entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
@@ -81,7 +81,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
-                Specialities? specialtiesToRemove = await _medicalAppointmentContext.Specialities.FindAsync(id);
+                Specialties? specialtiesToRemove = await _medicalAppointmentContext.Specialities.FindAsync(id);
                 specialtiesToRemove.SpecialtyName = entity.SpecialtyName;
                 specialtiesToRemove.CreatedAt = entity.CreatedAt;
                 specialtiesToRemove.CreatedBy = entity.CreatedBy;

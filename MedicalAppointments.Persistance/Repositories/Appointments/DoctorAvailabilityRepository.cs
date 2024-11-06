@@ -24,19 +24,25 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The entity is null";
+                operationResult.Message = "The entity is null.";
                 return operationResult;
 
             }
             if (entity.DoctorID == 0)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The doctor hasn't been selected";
+                operationResult.Message = "The doctor hasn't been selected.";
             }
             if (entity.StartTime == entity.EndTime)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The start time cannot be the same as the end time";
+                operationResult.Message = "The start time cannot be the same as the end time.";
+                return operationResult;
+            }
+            if (entity.StartTime >= entity.EndTime)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The start time cannot be after the end time.";
                 return operationResult;
             }
             if (await base.Exists(doctorAvailability => doctorAvailability.DoctorID == entity.DoctorID))
@@ -47,37 +53,47 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             try
             {
-                entity.IsActive = true;
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
                 operationResult = await base.Save(entity);
+
+                operationResult.Success = true;
+                operationResult.Message = "The docotor's availability has been was saved!";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "Hubo un error guardando la disponiblidad del doctor";
+                operationResult.Message = "There was an error saving the doctor's availability.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
         }
-        public async override Task<OperationResult> Update(int id,DoctorAvailability entity)
+        public async override Task<OperationResult> Update(int id, DoctorAvailability entity)
         {
             OperationResult operationResult = new();
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The entity is null";
+                operationResult.Message = "The entity is null.";
                 return operationResult;
 
             }
             if (entity.DoctorID == 0)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The doctor hasn't been selected";
+                operationResult.Message = "The doctor hasn't been selected.";
             }
             if (entity.StartTime == entity.EndTime)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The start time cannot be the same as the end time";
+                operationResult.Message = "The start time cannot be the same as the end time.";
+                return operationResult;
+            }
+            if (entity.StartTime >= entity.EndTime)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The start time cannot be after the end time.";
                 return operationResult;
             }
             try
@@ -87,10 +103,12 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 doctorAvailabilityToUpdate.AvailableDate = entity.AvailableDate;
                 doctorAvailabilityToUpdate.StartTime = entity.StartTime;
                 doctorAvailabilityToUpdate.EndTime = entity.EndTime;
-                doctorAvailabilityToUpdate.CreatedAt = entity.CreatedAt;
-                doctorAvailabilityToUpdate.UpdatedAt = entity.UpdatedAt;
-                doctorAvailabilityToUpdate.CreatedBy = entity.CreatedBy;
+                doctorAvailabilityToUpdate.UpdatedAt = DateTime.Now;
                 doctorAvailabilityToUpdate.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The doctor's availability was updated succesully!";
             }
             catch (Exception ex)
             {
@@ -106,7 +124,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             if (entity == null)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The entity is null";
+                operationResult.Message = "The entity is null.";
                 return operationResult;
 
             }
@@ -114,8 +132,12 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             {
                 DoctorAvailability? doctorAvailabilityToRemove = await _medicalAppointmentContext.DoctorAvailability.FindAsync(id);
                 doctorAvailabilityToRemove.IsActive = false;
-                doctorAvailabilityToRemove.UpdatedAt = entity.UpdatedAt;
+                doctorAvailabilityToRemove.UpdatedAt = DateTime.Now;
                 doctorAvailabilityToRemove.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The doctor's availability was disabled succesfully!";
 
             }
             catch (Exception ex)
@@ -185,6 +207,11 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   CreatedBy = doctorAvailabity.CreatedBy
                                               }).AsNoTracking()
                                             .ToListAsync();
+                if (operationResult.Data == null)
+                {
+                    operationResult.Success = false;
+                    operationResult.Message = "The ID does not exist on the database.";
+                }
 
             }
             catch (Exception ex)

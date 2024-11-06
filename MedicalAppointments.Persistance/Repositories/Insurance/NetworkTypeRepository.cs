@@ -29,14 +29,27 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 operationResult.Message = "The entity is null";
                 return operationResult;
             }
+            if(entity.Description.Length > 255)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The description is to long, it can only be top 250 characters.";
+                return operationResult;
+            }
             try
             {
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
+
                 await base.Save(entity);
+
+                operationResult.Success = true;
+                operationResult.Message = "The network type was saved successfully!";
+
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error saving the Network";
+                operationResult.Message = "There was an error saving the network type.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
 
             }
@@ -58,16 +71,20 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
                 networkTypeToUpdate.Name = entity.Name;
                 networkTypeToUpdate.Description = entity.Description;
-                networkTypeToUpdate.UpdatedAt = entity.UpdatedAt;
-                networkTypeToUpdate.IsActive = entity.IsActive;
+                networkTypeToUpdate.UpdatedAt = DateTime.Now;
                 networkTypeToUpdate.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+
+                operationResult.Success = true;
+                operationResult.Message = "The network type was successfully updated!";
+
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error updating the Network";
+                operationResult.Message = "There was an error updating the network type.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
-
             }
             return operationResult;
         }
@@ -86,13 +103,18 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                 NetworkType? networkTypeToRemove = await _medicalAppointmentContext.NetworkType.FindAsync(id);
 
                 networkTypeToRemove.IsActive = false;
-                networkTypeToRemove.UpdatedAt = entity.UpdatedAt;
+                networkTypeToRemove.UpdatedAt = DateTime.Now;
                 networkTypeToRemove.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+
+                operationResult.Success = true;
+                operationResult.Message = "The network type was disabled successfully!";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error removing the Network";
+                operationResult.Message = "There was an error removing the network type.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -111,14 +133,18 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   NetworkTypeID = networkType.NetworkTypeID,
                                                   Name = networkType.Name,
                                                   Description = networkType.Description,
-                                                  CreatedAt = networkType.CreatedAt
+                                                  CreatedAt = networkType.CreatedAt,
+                                                  UpdatedAt = networkType.UpdatedAt,
+                                                  IsActive = networkType.IsActive,
+                                                  CreatedBy = networkType.CreatedBy,
+                                                  UpdatedBy = networkType.UpdatedBy,
                                               }).AsNoTracking()
                                              .ToListAsync();
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error getting all the Networks";
+                operationResult.Message = "There was an error getting all the network types.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -138,9 +164,17 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   Name = networkType.Name,
                                                   Description = networkType.Description,
                                                   CreatedAt = networkType.CreatedAt,
+                                                  UpdatedAt = networkType.UpdatedAt,
+                                                  IsActive = networkType.IsActive,
                                                   CreatedBy = networkType.CreatedBy,
+                                                  UpdatedBy = networkType.UpdatedBy,
                                               }).AsNoTracking()
                              .ToListAsync();
+                if(operationResult.Data == null)
+                {
+                    operationResult.Success = false;
+                    operationResult.Message = "The selected ID does not exist in the Database.";
+                }
             }
             catch (Exception ex)
             {

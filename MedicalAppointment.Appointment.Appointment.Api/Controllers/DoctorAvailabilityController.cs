@@ -8,14 +8,9 @@ namespace MedicalAppointment.Appointment.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DoctorAvailabilityController : ControllerBase
+    public class DoctorAvailabilityController(IDoctorAvailabilityRepository doctorAvailabilityRepository) : ControllerBase
     {
-        private readonly IDoctorAvailabilityRepository _doctorAvailabilityRepository;
-
-        public DoctorAvailabilityController(IDoctorAvailabilityRepository doctorAvailabilityRepository) 
-        {
-            _doctorAvailabilityRepository = doctorAvailabilityRepository;
-        }
+        private readonly IDoctorAvailabilityRepository _doctorAvailabilityRepository = doctorAvailabilityRepository;
 
         [HttpGet("GetDoctorAvailability")]
         public async Task<IActionResult> Get()

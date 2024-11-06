@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointments.Domain.Entities.Medical
 {
-    [Table("Specialities", Schema = "medical")]
-    public sealed class Specialities : Base.BaseEntity
+    [Table("Specialties", Schema = "medical")]
+    public sealed class Specialties : Base.BaseEntity
     {
         [Key]
         public int SpecialtyID {  get; private set; }

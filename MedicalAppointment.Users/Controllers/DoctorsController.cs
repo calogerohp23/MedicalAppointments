@@ -2,8 +2,6 @@
 using MedicalAppointments.Persistance.Interfaces.Users;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace MedicalAppointment.Users.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -49,10 +47,9 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpPut("UpdateDoctors")]
-        public async Task<IActionResult> Put([FromBody] Doctors doctors)
+        public async Task<IActionResult> Put(int id, [FromBody] Doctors doctors)
         {
-            var result = await _doctorsRepository.Update(doctors);
-
+            var result = await _doctorsRepository.Update(id, doctors);
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -61,10 +58,9 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpDelete("DisableDoctors")]
-        public async Task<IActionResult> Delete(Doctors doctors)
+        public async Task<IActionResult> Delete(int id, [FromBody] Doctors doctors)
         {
-            var result = await _doctorsRepository.Remove(doctors);
-
+            var result = await _doctorsRepository.Remove(id, doctors);
             if (!result.Success)
             {
                 return BadRequest(result);

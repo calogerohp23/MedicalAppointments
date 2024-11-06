@@ -67,6 +67,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                 doctorsToUpdate.LicenseExpirationDate = entity.LicenseExpirationDate;
                 doctorsToUpdate.UpdatedAt = entity.UpdatedAt;
                 doctorsToUpdate.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -86,6 +88,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                 doctorsToRemove.IsActive = false;
                 doctorsToRemove.UpdatedAt = entity.UpdatedAt;
                 doctorsToRemove.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

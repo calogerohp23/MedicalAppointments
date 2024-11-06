@@ -43,9 +43,9 @@ namespace MedicalAppointment.System.Api.Controllers
             return Ok(result);
         }
         [HttpPut("UpdateStatus")]
-        public async Task<IActionResult> Put([FromBody] Status status)
+        public async Task<IActionResult> Put(int id, [FromBody] Status status)
         {
-            var result = await _statusRepository.Update(status);
+            var result = await _statusRepository.Update(id, status);
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -53,9 +53,9 @@ namespace MedicalAppointment.System.Api.Controllers
             return Ok(result);
         }
         [HttpDelete("DisableStatus")]
-        public async Task<IActionResult> Disable(Status status)
+        public async Task<IActionResult> Disable(int id, [FromBody] Status status)
         {
-            var result = await _statusRepository.Remove(status);
+            var result = await _statusRepository.Remove(id, status);
             if (!result.Success)
             {
                 return BadRequest(result);

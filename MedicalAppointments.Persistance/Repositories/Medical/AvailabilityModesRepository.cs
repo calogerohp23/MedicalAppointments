@@ -31,7 +31,13 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             }
             try
             {
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
+
                 await base.Save(entity);
+
+                operationResult.Success = true;
+                operationResult.Message = "The availability mode was successfully saved!";
             }
             catch (Exception ex)
             {
@@ -55,9 +61,13 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             {
                 AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(id);  
                 availabilityModesToUpdate.AvailabilityMode = entity.AvailabilityMode;
-                availabilityModesToUpdate.UpdatedAt = entity.UpdatedAt;
+                availabilityModesToUpdate.UpdatedAt = DateTime.Now;
                 availabilityModesToUpdate.UpdatedBy = entity.UpdatedBy;
 
+                await _medicalAppointmentContext.SaveChangesAsync();
+
+                operationResult.Success = true;
+                operationResult.Message = "The availability mode was successfully updated!";
             }
             catch (Exception ex)
             {
@@ -81,12 +91,17 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             {
                 AvailabilityModes? availabilityModesToRemove = await _medicalAppointmentContext.AvailabilityModes.FindAsync(id);
                 availabilityModesToRemove.IsActive = false;
-                availabilityModesToRemove.UpdatedAt = entity.UpdatedAt;
+                availabilityModesToRemove.UpdatedAt = DateTime.Now;
                 availabilityModesToRemove.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The availability Mode was successfully disabled";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
+
                 operationResult.Message = "The availability mode couldn't be removed.";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
@@ -139,6 +154,15 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   UpdatedBy = availabilityModes.UpdatedBy,
                                               }).AsNoTracking()
                                             .ToListAsync();
+                if(operationResult.Data == null)
+                {
+                    operationResult.Success = false;
+                    operationResult.Message = "The selected ID does not exist in the Database.";
+                }
+                else
+                {
+                    operationResult.Success = true;
+                }
             }
             catch (Exception ex)
             {

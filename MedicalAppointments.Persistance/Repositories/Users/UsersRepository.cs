@@ -24,7 +24,13 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             OperationResult operationResult = new();
             try
             {
+                entity.CreatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
+
                 await base.Save(entity);
+
+                operationResult.Success = true;
+                operationResult.Message = "The user was saved successfully";
             }
             catch (Exception ex)
             {
@@ -38,6 +44,12 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> Update(int id,Domain.Entities.Users.Users entity)
         {
             OperationResult operationResult = new();
+            if (await base.Exists(users => users.UserID == id))
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The selected ID does not exist";
+                return operationResult;
+            }
             try
             {
                 Domain.Entities.Users.Users? usersToUpdate = await _medicalAppointmentContext.Users.FindAsync(id);
@@ -48,14 +60,18 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                 usersToUpdate.RoleId = entity.RoleId;
                 usersToUpdate.CreatedAt = entity.CreatedAt;
                 usersToUpdate.CreatedBy = entity.CreatedBy;
-                usersToUpdate.UpdatedAt = entity.UpdatedAt;
+                usersToUpdate.UpdatedAt = DateTime.Now;
                 usersToUpdate.UpdatedBy = entity.UpdatedBy;
                 usersToUpdate.IsActive = entity.IsActive;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The user was updated succesfuly";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error saving the doctor";
+                operationResult.Message = "There was an error updating the user";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -64,17 +80,28 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> Remove(int id, Domain.Entities.Users.Users entity)
         {
             OperationResult operationResult = new();
+            if (await base.Exists(users => users.UserID == id))
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The selected ID does not exist";
+                return operationResult;
+            }
             try
             {
                 Domain.Entities.Users.Users? usersToRemove = await _medicalAppointmentContext.Users.FindAsync(id);
                 usersToRemove.IsActive = false;
                 usersToRemove.UpdatedAt = entity.UpdatedAt;
                 usersToRemove.UpdatedBy = entity.UpdatedBy;
+                
+                await _medicalAppointmentContext.SaveChangesAsync();
+                
+                operationResult.Success = true;
+                operationResult.Message = "The user was updated succesfuly";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error saving the doctor";
+                operationResult.Message = "There was an error removing the user";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -102,19 +129,26 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   UpdatedBy = users.UpdatedBy
                                               }).AsNoTracking()
                                               .ToListAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The users were found!";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error saving the doctor";
+                operationResult.Message = "There was an error finding all the users";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
         public async override Task<OperationResult> GetEntityBy(int id)
-        {
+        {            
             OperationResult operationResult = new();
+            if (await base.Exists(users => users.UserID == id)){
+                operationResult.Success = false;
+                operationResult.Message = "The selected ID does not exist";
+                return operationResult;
+            }
             try
             {
                 operationResult.Data = await (from users in _medicalAppointmentContext.Users
@@ -134,11 +168,13 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   UpdatedBy = users.UpdatedBy
                                               }).AsNoTracking()
                               .ToListAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The query was succesful";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "There was an error saving the doctor";
+                operationResult.Message = "There was an error finding the user";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;

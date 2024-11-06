@@ -55,7 +55,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 return operationResult;
             }
 
-            // se repite - solo para appointemnts
             if (entity.AppointmentDate.DayOfWeek == DayOfWeek.Saturday || entity.AppointmentDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 operationResult.Success = false;
@@ -64,7 +63,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             try
             {
-
+                entity.CreatedAt = DateTime.UtcNow;
+                entity.UpdatedAt = DateTime.UtcNow;
                 operationResult = await base.Save(entity);
             }
             catch (Exception ex)
@@ -108,27 +108,38 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 operationResult.Message = "The appointment can only be on business days.";
                 return operationResult;
             }
+
+            if (id != entity.AppointmentID)
+            {
+
+                operationResult.Success = false;
+                operationResult.Message = "The selected appointment does not exist";
+                return operationResult;
+            }
+
             try
             {
                 Appointment? appointmentToUpdate = await _medicalAppointmentContext.Appointments.FindAsync(id);
                 appointmentToUpdate.PatientID = entity.PatientID;
                 appointmentToUpdate.DoctorID = entity.DoctorID;
                 appointmentToUpdate.AppointmentDate = entity.AppointmentDate;
-                appointmentToUpdate.StatusID = entity.StatusID;
-                appointmentToUpdate.UpdatedAt = entity.UpdatedAt;
+                appointmentToUpdate.UpdatedAt = DateTime.Now;
                 appointmentToUpdate.UpdatedBy = entity.UpdatedBy;
-                appointmentToUpdate.IsActive = entity.IsActive;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The appointment was updated succesfully";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "An error ocurred while updating the appointment";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(int id,Appointment entity)
+        public async override Task<OperationResult> Remove(int id, Appointment entity)
         {
             OperationResult operationResult = new();
             // se repite
@@ -138,26 +149,34 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 operationResult.Message = "The entity is null.";
                 return operationResult;
             }
-            // se repite - solo para appointemnts
             if (entity.StatusID == 2)
             {
                 operationResult.Success = false;
                 operationResult.Message = "The appointment has been removed.";
                 return operationResult;
             }
-            // se repite - solo para appointemnts
             if (entity.StatusID == 3)
             {
                 operationResult.Success = false;
                 operationResult.Message = "The appointment has been completed.";
                 return operationResult;
             }
+            if (entity.AppointmentID != id)
+            {
+                operationResult.Success = false;
+                operationResult.Message = "The selected appointment does not exist";
+                return operationResult;
+            }
             try
             {
-                Appointment? appointmentToRemove = await _medicalAppointmentContext.Appointments.FindAsync(int id);
+                Appointment? appointmentToRemove = await _medicalAppointmentContext.Appointments.FindAsync(id);
                 appointmentToRemove.StatusID = 2;
-                appointmentToRemove.UpdatedAt = entity.UpdatedAt;
+                appointmentToRemove.UpdatedAt = DateTime.Now;
                 appointmentToRemove.UpdatedBy = entity.UpdatedBy;
+
+                await _medicalAppointmentContext.SaveChangesAsync();
+                operationResult.Success = true;
+                operationResult.Message = "The appointment was disabled succesfully";
             }
             catch (Exception ex)
             {
@@ -206,10 +225,10 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
-            if (id == 0)
+            if (id <= 0)
             {
                 operationResult.Success = false;
-                operationResult.Message = "The ID is null";
+                operationResult.Message = "The ID must be positive or an integer";
                 return operationResult;
             }
             try
@@ -234,6 +253,11 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   CreatedBy = appointment.CreatedBy,
                                                   UpdatedBy = appointment.UpdatedBy
                                               }).FirstOrDefaultAsync();
+                if (operationResult.Data == null)
+                {
+                    operationResult.Success = false;
+                    operationResult.Message = "The ID does not exist on the Database";
+                }
             }
             catch (Exception ex)
             {

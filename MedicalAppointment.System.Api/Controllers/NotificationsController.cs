@@ -28,7 +28,7 @@ namespace MedicalAppointment.System.Api.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var result = await _notificationRepository.GetEntityBy(id);
-            if (!result.Success) 
+            if (!result.Success)
             {
                 return BadRequest(result);
             }
@@ -39,7 +39,7 @@ namespace MedicalAppointment.System.Api.Controllers
         public async Task<IActionResult> Post([FromBody] Notifications notifications)
         {
             var result = await _notificationRepository.Save(notifications);
-            if (!result.Success) 
+            if (!result.Success)
             {
                 return BadRequest(result);
             }
@@ -47,9 +47,9 @@ namespace MedicalAppointment.System.Api.Controllers
         }
 
         [HttpPut("UpdateNotfication")]
-        public async Task<IActionResult> Put([FromBody] Notifications notifications)
+        public async Task<IActionResult> Put(int id, [FromBody] Notifications notifications)
         {
-            var result = await _notificationRepository.Update(notifications);
+            var result = await _notificationRepository.Update(id, notifications);
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -58,9 +58,9 @@ namespace MedicalAppointment.System.Api.Controllers
         }
 
         [HttpDelete("DisableNotification")]
-        public async Task<IActionResult> Disable(Notifications notifications)
+        public async Task<IActionResult> Disable(int id, [FromBody] Notifications notifications)
         {
-            var result = await _notificationRepository.Remove(notifications);
+            var result = await _notificationRepository.Remove(id, notifications);
             if (!result.Success)
             {
                 return BadRequest(result);

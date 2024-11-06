@@ -1,16 +1,14 @@
-﻿using MedicalAppointments.Persistance.Interfaces.Appointment;
+﻿using MedicalAppointments.Domain.Entities.Insurance;
 using MedicalAppointments.Persistance.Interfaces.Insurance;
-using MedicalAppointments.Persistance.Repositories.Appointments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalAppointment.Insurance.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NetworkTypeController : ControllerBase
+    public class NetworkTypeController(INetworkTypeRepository networkTypeRepository) : ControllerBase
     {
-        private readonly INetworkTypeRepository _networkTypeRepository;
-        public NetworkTypeController(INetworkTypeRepository networkTypeRepository) => _networkTypeRepository = networkTypeRepository;
+        private readonly INetworkTypeRepository _networkTypeRepository = networkTypeRepository;
 
         [HttpGet("GetNetworkType")]
         public async Task<IActionResult> Get()
@@ -24,25 +22,48 @@ namespace MedicalAppointment.Insurance.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("G")]
-        public string Get(int id)
+        [HttpGet("GetNetworkTypeByID")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _networkTypeRepository.GetEntityBy(id);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveNetworkType")]
+        public async Task<IActionResult> Post([FromBody] NetworkType networkType)
         {
+            var result = await _networkTypeRepository.Save(networkType);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateNetworkType")]
+        public async Task<IActionResult> Put(int id, [FromBody] NetworkType networkType)
         {
+            var result = await _networkTypeRepository.Update(id, networkType);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("DisableNetworkType")]
+        public async Task<IActionResult> Delete(int id, [FromBody] NetworkType networkType)
         {
+            var result = await _networkTypeRepository.Remove(id, networkType);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }

@@ -5,10 +5,9 @@ namespace MedicalAppointment.Appointment.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppointmentController : ControllerBase
+    public class AppointmentController(IAppointmentRepository appointmentRepository) : ControllerBase
     {
-        private readonly IAppointmentRepository _appointmentRepository;
-        public AppointmentController(IAppointmentRepository appointmentRepository) => _appointmentRepository = appointmentRepository;
+        private readonly IAppointmentRepository _appointmentRepository = appointmentRepository;
 
         [HttpGet("GetAppointments")]
         public async Task<IActionResult> Get()
@@ -45,9 +44,9 @@ namespace MedicalAppointment.Appointment.Api.Controllers
         }
         
         [HttpPut("UpdateAppointment")]
-        public async Task<IActionResult> Put([FromBody] MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
+        public async Task<IActionResult> Put(int id, [FromBody] MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
         {
-            var result = await _appointmentRepository.Update(appointment);
+            var result = await _appointmentRepository.Update(id,appointment);
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -56,9 +55,9 @@ namespace MedicalAppointment.Appointment.Api.Controllers
         }
 
         [HttpDelete("DisableAppointment")]
-        public async Task<IActionResult> Disable(MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
+        public async Task<IActionResult> Disable(int id, MedicalAppointments.Domain.Entities.Appointments.Appointment appointment)
         {
-            var result = await _appointmentRepository.Remove(appointment);
+            var result = await _appointmentRepository.Remove(id, appointment);
             if (!result.Success)
             {
                 return BadRequest(result);
