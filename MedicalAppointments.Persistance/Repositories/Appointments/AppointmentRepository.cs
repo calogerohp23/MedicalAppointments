@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Appointment;
 using MedicalAppointments.Persistance.Models.Appointments;
+using MedicalAppointments.Persistance.Validators.Appointments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,52 +14,26 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<AppointmentRepository> logger;
-        public AppointmentRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AppointmentRepository> logger) : base(medicalAppointmentContext)
+        private readonly AppointmentValidator _validator;
+        public AppointmentRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AppointmentRepository> logger, AppointmentValidator appointmentValidator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = appointmentValidator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Appointment entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
-            }
-            if (entity.PatientID == 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "A patient hasn't been selected.";
-                return operationResult;
-            }
-            if (entity.DoctorID == 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "A doctor hasn't been selected.";
-                return operationResult;
-            }
-            if (entity.AppointmentDate < DateTime.UtcNow)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The appointment date must be different.";
-                return operationResult;
-            }
+
+            _validator.ValidateNull(entity);
+            _validator.ValidateSave(entity);
 
             if (await base.Exists(appointment => appointment.AppointmentID == entity.AppointmentID
                       && appointment.PatientID == entity.PatientID && appointment.DoctorID == entity.DoctorID))
             {
                 operationResult.Success = false;
                 operationResult.Message = "The appointment already exist.";
-                return operationResult;
-            }
-
-            if (entity.AppointmentDate.DayOfWeek == DayOfWeek.Saturday || entity.AppointmentDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The appointment can only be on business days.";
                 return operationResult;
             }
             try
@@ -70,7 +45,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "An error ocurred while saving the appointment.";
+                operationResult.Message = "An error occurred while saving the appointment.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -80,42 +55,9 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         {
             OperationResult operationResult = new();
 
-            // se repite
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
-            }
-            // se repite - solo para appointemnts
-            if (entity.StatusID == 2)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The appointment has been removed.";
-                return operationResult;
-            }
-            // se repite - solo para appointemnts
-            if (entity.StatusID == 3)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The appointment has been completed.";
-                return operationResult;
-            }
-            // se repite - solo para appointemnts
-            if (entity.AppointmentDate.DayOfWeek == DayOfWeek.Saturday || entity.AppointmentDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The appointment can only be on business days.";
-                return operationResult;
-            }
-
-            if (id != entity.AppointmentID)
-            {
-
-                operationResult.Success = false;
-                operationResult.Message = "The selected appointment does not exist";
-                return operationResult;
-            }
+            _validator.ValidateNull(entity);
+            _validator.ValidateID(id);
+            _validator.ValidateUpdate(id, entity);
 
             try
             {
@@ -142,31 +84,10 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         public async override Task<OperationResult> Remove(int id, Appointment entity)
         {
             OperationResult operationResult = new();
-            // se repite
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
-            }
-            if (entity.StatusID == 2)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The appointment has been removed.";
-                return operationResult;
-            }
-            if (entity.StatusID == 3)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The appointment has been completed.";
-                return operationResult;
-            }
-            if (entity.AppointmentID != id)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The selected appointment does not exist";
-                return operationResult;
-            }
+
+            _validator.ValidateNull(entity);
+            _validator.ValidateID(id);
+            _validator.ValidateRemove(id, entity);
             try
             {
                 Appointment? appointmentToRemove = await _medicalAppointmentContext.Appointments.FindAsync(id);
@@ -176,12 +97,12 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
 
                 await _medicalAppointmentContext.SaveChangesAsync();
                 operationResult.Success = true;
-                operationResult.Message = "The appointment was disabled succesfully";
+                operationResult.Message = "The appointment was disabled successfully!";
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "An error ocurred while removing the appointment.";
+                operationResult.Message = "An error occurred while removing the appointment.";
                 this.logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -216,7 +137,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "An error ocurred while obtaining the appointments registry.";
+                operationResult.Message = "An error occurred while obtaining the appointments registry.";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
@@ -225,12 +146,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
-            if (id <= 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The ID must be positive or an integer";
-                return operationResult;
-            }
+            _validator.ValidateID(id);
             try
             {
                 operationResult.Data = await (from appointment in _medicalAppointmentContext.Appointments
@@ -253,16 +169,13 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   CreatedBy = appointment.CreatedBy,
                                                   UpdatedBy = appointment.UpdatedBy
                                               }).FirstOrDefaultAsync();
-                if (operationResult.Data == null)
-                {
-                    operationResult.Success = false;
-                    operationResult.Message = "The ID does not exist on the Database";
-                }
+                
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
-                operationResult.Message = "An error ocurred while obtaining the appointments registry.";
+                operationResult.Message = "An error occurred while obtaining the appointments registry.";
                 logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;

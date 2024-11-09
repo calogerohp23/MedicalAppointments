@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Medical;
 using MedicalAppointments.Persistance.Models.Medical;
+using MedicalAppointments.Persistance.Validators.Medical;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,22 +14,21 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<AvailabilityModesRepository> logger;
+        private readonly AvailabilityModesValidator _validator;
 
-        public AvailabilityModesRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AvailabilityModesRepository> logger) : base(medicalAppointmentContext)
+        public AvailabilityModesRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<AvailabilityModesRepository> logger, AvailabilityModesValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(AvailabilityModes entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+
+            _validator.ValidateSave(entity);
+
             try
             {
                 entity.CreatedAt = DateTime.Now;
@@ -51,15 +51,10 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
         public async override Task<OperationResult> Update(int id, AvailabilityModes entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+            _validator.ValidateUpdate(id, entity);
             try
             {
-                AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(id);  
+                AvailabilityModes? availabilityModesToUpdate = await _medicalAppointmentContext.AvailabilityModes.FindAsync(id);
                 availabilityModesToUpdate.AvailabilityMode = entity.AvailabilityMode;
                 availabilityModesToUpdate.UpdatedAt = DateTime.Now;
                 availabilityModesToUpdate.UpdatedBy = entity.UpdatedBy;
@@ -81,12 +76,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
         public async override Task<OperationResult> Remove(int id, AvailabilityModes entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+            _validator.ValidateRemove(id, entity);
             try
             {
                 AvailabilityModes? availabilityModesToRemove = await _medicalAppointmentContext.AvailabilityModes.FindAsync(id);
@@ -96,7 +86,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
 
                 await _medicalAppointmentContext.SaveChangesAsync();
                 operationResult.Success = true;
-                operationResult.Message = "The availability Mode was successfully disabled";
+                operationResult.Message = "The availability Mode was successfully disabled!";
             }
             catch (Exception ex)
             {
@@ -139,6 +129,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
+            _validator.ValidateID(id);
             try
             {
                 operationResult.Data = await (from availabilityModes in _medicalAppointmentContext.AvailabilityModes
@@ -154,15 +145,7 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   UpdatedBy = availabilityModes.UpdatedBy,
                                               }).AsNoTracking()
                                             .ToListAsync();
-                if(operationResult.Data == null)
-                {
-                    operationResult.Success = false;
-                    operationResult.Message = "The selected ID does not exist in the Database.";
-                }
-                else
-                {
-                    operationResult.Success = true;
-                }
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }
             catch (Exception ex)
             {

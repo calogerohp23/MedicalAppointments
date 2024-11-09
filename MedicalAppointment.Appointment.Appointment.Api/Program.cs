@@ -1,6 +1,7 @@
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Appointment;
 using MedicalAppointments.Persistance.Repositories.Appointments;
+using MedicalAppointments.Persistance.Validators.Appointments;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +11,10 @@ builder.Services.AddDbContext<MedicalAppointmentContext>(option => option.UseSql
 
 // Dependencies Registry
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<AppointmentValidator>();
 builder.Services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
+builder.Services.AddScoped<DoctorAvailabilityValidator>();
 // Services Registry
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

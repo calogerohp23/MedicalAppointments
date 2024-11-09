@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Users;
 using MedicalAppointments.Persistance.Models.Users;
+using MedicalAppointments.Persistance.Validators.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -14,16 +15,19 @@ namespace MedicalAppointments.Persistance.Repositories.Users
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<PatientsRepository> logger;
+        private readonly PatientsValidator _validator;
 
-        public PatientsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<PatientsRepository> logger) : base(medicalAppointmentContext)
+        public PatientsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<PatientsRepository> logger, PatientsValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Patients entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateSave(entity);
             try
             {
                 await base.Save(entity);
@@ -40,6 +44,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> Update(int id, Patients entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateUpdate(id, entity);
             try
             {
                 Patients? patientsToUpdate = await _medicalAppointmentContext.Patients.FindAsync(id);
@@ -70,6 +75,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> Remove(int id, Patients entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateRemove(id, entity);
             try
             {
                 Patients? patientsToRemove = await _medicalAppointmentContext.Patients.FindAsync(id);
@@ -133,6 +139,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
+            _validator.ValidateID(id);
             try
             {
                 operationResult.Data = await (from patients in _medicalAppointmentContext.Patients
@@ -163,6 +170,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   UpdatedBy = patients.UpdatedBy,
                                               }).AsNoTracking()
                                 .ToListAsync();
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }
             catch (Exception ex)
             {

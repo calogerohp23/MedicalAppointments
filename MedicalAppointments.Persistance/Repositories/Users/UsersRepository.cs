@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Users;
 using MedicalAppointments.Persistance.Models.Users;
+using MedicalAppointments.Persistance.Validators.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 namespace MedicalAppointments.Persistance.Repositories.Users
@@ -12,16 +13,19 @@ namespace MedicalAppointments.Persistance.Repositories.Users
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<UsersRepository> logger;
+        private readonly UsersValidator _validator;
 
-        public UsersRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<UsersRepository> logger) : base(medicalAppointmentContext)
+        public UsersRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<UsersRepository> logger, UsersValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Domain.Entities.Users.Users entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateSave(entity);
             try
             {
                 entity.CreatedAt = DateTime.Now;
@@ -41,15 +45,10 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(int id,Domain.Entities.Users.Users entity)
+        public async override Task<OperationResult> Update(int id, Domain.Entities.Users.Users entity)
         {
             OperationResult operationResult = new();
-            if (await base.Exists(users => users.UserID == id))
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The selected ID does not exist";
-                return operationResult;
-            }
+            _validator.ValidateUpdate(id, entity);
             try
             {
                 Domain.Entities.Users.Users? usersToUpdate = await _medicalAppointmentContext.Users.FindAsync(id);
@@ -80,21 +79,16 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> Remove(int id, Domain.Entities.Users.Users entity)
         {
             OperationResult operationResult = new();
-            if (await base.Exists(users => users.UserID == id))
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The selected ID does not exist";
-                return operationResult;
-            }
+            _validator.ValidateRemove(id, entity);
             try
             {
                 Domain.Entities.Users.Users? usersToRemove = await _medicalAppointmentContext.Users.FindAsync(id);
                 usersToRemove.IsActive = false;
                 usersToRemove.UpdatedAt = entity.UpdatedAt;
                 usersToRemove.UpdatedBy = entity.UpdatedBy;
-                
+
                 await _medicalAppointmentContext.SaveChangesAsync();
-                
+
                 operationResult.Success = true;
                 operationResult.Message = "The user was updated succesfuly";
             }
@@ -142,13 +136,9 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         }
 
         public async override Task<OperationResult> GetEntityBy(int id)
-        {            
+        {
             OperationResult operationResult = new();
-            if (await base.Exists(users => users.UserID == id)){
-                operationResult.Success = false;
-                operationResult.Message = "The selected ID does not exist";
-                return operationResult;
-            }
+            _validator.ValidateID(id);
             try
             {
                 operationResult.Data = await (from users in _medicalAppointmentContext.Users
@@ -168,6 +158,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   UpdatedBy = users.UpdatedBy
                                               }).AsNoTracking()
                               .ToListAsync();
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
+                
                 operationResult.Success = true;
                 operationResult.Message = "The query was succesful";
             }

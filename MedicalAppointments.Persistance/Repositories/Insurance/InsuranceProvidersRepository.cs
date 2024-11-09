@@ -5,6 +5,7 @@ using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Insurance;
 using MedicalAppointments.Persistance.Models;
 using MedicalAppointments.Persistance.Models.Insurance;
+using MedicalAppointments.Persistance.Validators.Insurance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -14,10 +15,12 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<InsuranceProvidersRepository> logger;
+        private readonly InsuranceProvidersValidator _validator;
 
-        public InsuranceProvidersRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<InsuranceProvidersRepository> logger) : base(medicalAppointmentContext)
+        public InsuranceProvidersRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<InsuranceProvidersRepository> logger, InsuranceProvidersValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
@@ -25,12 +28,9 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         {
             OperationResult operationResult = new();
 
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+            _validator.ValidateNull(entity);
+            _validator.ValidateSave(entity);
+
             try
             {
                 entity.CreatedAt = DateTime.Now;
@@ -49,12 +49,10 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> Update(int id, InsuranceProviders entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+
+            _validator.ValidateNull(entity);
+            _validator.ValidateUpdate(id, entity);
+
             try
             {
                 InsuranceProviders? insuranceProvidersToUpdate = await _medicalAppointmentContext.InsuranceProviders.FindAsync(id);
@@ -95,12 +93,10 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> Remove(int id, InsuranceProviders entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+
+            _validator.ValidateNull(entity);
+            _validator.ValidateRemove(id, entity);
+
             try
             {
                 InsuranceProviders? insuranceProvidersToRemove = await _medicalAppointmentContext.InsuranceProviders.FindAsync(id);
@@ -170,12 +166,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
-            if (id == 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The insurance provider does not exist";
-                return operationResult;
-            }
+            _validator.ValidateID(id);
             try
             {
                 operationResult.Data = await (from insuranceProviders in _medicalAppointmentContext.InsuranceProviders
@@ -208,11 +199,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
 
                                               }).AsNoTracking()
                                             .ToListAsync();
-                if(operationResult.Data == null)
-                {
-                    operationResult.Success = false;
-                    operationResult.Message = "The ID provided does not exist in the Database.";
-                }
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
+
             }
             catch (Exception ex)
             {

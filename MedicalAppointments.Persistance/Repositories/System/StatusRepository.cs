@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.System;
 using MedicalAppointments.Persistance.Models.System;
+using MedicalAppointments.Persistance.Validators.System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,22 +14,19 @@ namespace MedicalAppointments.Persistance.Repositories.System
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<StatusRepository> logger;
+        private readonly StatusValidator _validator;
 
-        public StatusRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<StatusRepository> logger) : base(medicalAppointmentContext)
+        public StatusRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<StatusRepository> logger, StatusValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Status entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
-            }
+            _validator.ValidateSave(entity);
             try
             {
                 await base.Save(entity);
@@ -45,12 +43,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
         public async override Task<OperationResult> Update(int id, Status entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
-            }
+            _validator.ValidateUpdate(id, entity);
             try
             {
                 Status? statusToUpdate = await _medicalAppointmentContext.Status.FindAsync(id);
@@ -69,6 +62,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
         public async override Task<OperationResult> Remove(int id, Status entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateRemove(id, entity);
             if (entity == null)
             {
                 operationResult.Success = false;
@@ -114,6 +108,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
+            _validator.ValidateID(id);
             try
             {
                 operationResult.Data = await (from status in _medicalAppointmentContext.Status
@@ -124,6 +119,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
                                                   StatusName = status.StatusName,
                                               }).AsNoTracking()
                         .ToListAsync();
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }
             catch (Exception ex)
             {

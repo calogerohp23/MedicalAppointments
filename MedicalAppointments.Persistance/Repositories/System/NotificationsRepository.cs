@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.System;
 using MedicalAppointments.Persistance.Models.System;
+using MedicalAppointments.Persistance.Validators.System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,22 +14,20 @@ namespace MedicalAppointments.Persistance.Repositories.System
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<NotificationsRepository> logger;
+        private readonly NotificationsValidator _validator;
 
-        public NotificationsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NotificationsRepository> logger) : base(medicalAppointmentContext)
+        public NotificationsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NotificationsRepository> logger, NotificationsValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Notifications entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+            _validator.ValidateSave(entity);
+
             try
             {
                 await base.Save(entity);
@@ -45,6 +44,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
         public async override Task<OperationResult> Update(int id, Notifications entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateUpdate(id, entity);
             try
             {
                 Notifications? notificationsToUpdate = await _medicalAppointmentContext.Notifications.FindAsync(id);
@@ -64,6 +64,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
         public async override Task<OperationResult> Remove(int id, Notifications entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateRemove(id, entity);
             try
             {
                 Notifications? notificationsToRemove = await _medicalAppointmentContext.Notifications.FindAsync(id);
@@ -107,7 +108,9 @@ namespace MedicalAppointments.Persistance.Repositories.System
 
         public async override Task<OperationResult> GetEntityBy(int id)
         {
-            OperationResult operationResult = new(); try
+            OperationResult operationResult = new();
+            _validator.ValidateID(id);
+            try
             {
                 operationResult.Data = await (from notifications in _medicalAppointmentContext.Notifications
                                               join users in _medicalAppointmentContext.Users on notifications.UserId equals users.UserID
@@ -120,6 +123,7 @@ namespace MedicalAppointments.Persistance.Repositories.System
                                                   SentAt = notifications.SentAt,
                                               }).AsNoTracking()
                               .ToListAsync();
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }
             catch (Exception ex)
             {

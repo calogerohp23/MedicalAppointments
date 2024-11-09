@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Appointment;
 using MedicalAppointments.Persistance.Models.Appointments;
+using MedicalAppointments.Persistance.Validators.Appointments;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -12,39 +13,21 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
     public class DoctorAvailabilityRepository : BaseRepository<DoctorAvailability>, IDoctorAvailabilityRepository
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
-        private readonly ILogger<DoctorAvailabilityRepository> logger;
-        public DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorAvailabilityRepository> logger) : base(medicalAppointmentContext)
+        private readonly ILogger<DoctorAvailabilityRepository> _logger;
+        private readonly DoctorAvailabilityValidator _validator;
+        public DoctorAvailabilityRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorAvailabilityRepository> logger, DoctorAvailabilityValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
-            this.logger = logger;
+            _logger = logger;
+            _validator = validator;
         }
         public async override Task<OperationResult> Save(DoctorAvailability entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
+            
+            _validator.ValidateNull(entity);
+            _validator.ValidateSave(entity);
 
-            }
-            if (entity.DoctorID == 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The doctor hasn't been selected.";
-            }
-            if (entity.StartTime == entity.EndTime)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The start time cannot be the same as the end time.";
-                return operationResult;
-            }
-            if (entity.StartTime >= entity.EndTime)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The start time cannot be after the end time.";
-                return operationResult;
-            }
             if (await base.Exists(doctorAvailability => doctorAvailability.DoctorID == entity.DoctorID))
             {
                 operationResult.Success = false;
@@ -64,7 +47,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error saving the doctor's availability.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
 
             return operationResult;
@@ -72,30 +55,11 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         public async override Task<OperationResult> Update(int id, DoctorAvailability entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
 
-            }
-            if (entity.DoctorID == 0)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The doctor hasn't been selected.";
-            }
-            if (entity.StartTime == entity.EndTime)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The start time cannot be the same as the end time.";
-                return operationResult;
-            }
-            if (entity.StartTime >= entity.EndTime)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The start time cannot be after the end time.";
-                return operationResult;
-            }
+            _validator.ValidateNull(entity);
+            _validator.ValidateID(id);
+            _validator.ValidateUpdate(id,entity);
+
             try
             {
                 DoctorAvailability? doctorAvailabilityToUpdate = await _medicalAppointmentContext.DoctorAvailability.FindAsync(id);
@@ -114,20 +78,17 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error updating the doctor's availability.";
-                this.logger.LogError(operationResult.Message, ex.ToString());
+                _logger.LogError(operationResult.Message, ex.ToString());
             }
             return operationResult;
         }
         public async override Task<OperationResult> Remove(int id, DoctorAvailability entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
+            
+            _validator.ValidateID(id);
+            _validator.ValidateRemove(id,entity);
 
-            }
             try
             {
                 DoctorAvailability? doctorAvailabilityToRemove = await _medicalAppointmentContext.DoctorAvailability.FindAsync(id);
@@ -144,7 +105,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error removing the doctor's availability.";
-                this.logger.LogError(operationResult.Message, ex);
+                _logger.LogError(operationResult.Message, ex);
             }
 
             return operationResult;
@@ -177,7 +138,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaining all the doctor's availability.";
-                this.logger.LogError(operationResult.Message, ex);
+                _logger.LogError(operationResult.Message, ex);
             }
 
             return operationResult;
@@ -186,6 +147,7 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
+            _validator.ValidateID(id);
 
             try
             {
@@ -207,18 +169,15 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   CreatedBy = doctorAvailabity.CreatedBy
                                               }).AsNoTracking()
                                             .ToListAsync();
-                if (operationResult.Data == null)
-                {
-                    operationResult.Success = false;
-                    operationResult.Message = "The ID does not exist on the database.";
-                }
+
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
 
             }
             catch (Exception ex)
             {
                 operationResult.Success = false;
                 operationResult.Message = "There was an error obtaining all the doctor's availabilities.";
-                this.logger.LogError(operationResult.Message, ex);
+                _logger.LogError(operationResult.Message, ex);
             }
 
             return operationResult;

@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Insurance;
 using MedicalAppointments.Persistance.Models.Insurance;
+using MedicalAppointments.Persistance.Validators.Insurance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,28 +14,22 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<NetworkTypeRepository> logger;
+        private readonly NetworkTypeValidator _validator;
 
-        public NetworkTypeRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NetworkTypeRepository> logger) : base(medicalAppointmentContext)
+        public NetworkTypeRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<NetworkTypeRepository> logger, NetworkTypeValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(NetworkType entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
-            if(entity.Description.Length > 255)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The description is to long, it can only be top 250 characters.";
-                return operationResult;
-            }
+
+            _validator.ValidateNull(entity);
+            _validator.ValidateSave(entity);
+
             try
             {
                 entity.CreatedAt = DateTime.Now;
@@ -59,12 +54,11 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> Update(int id, NetworkType entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+
+            _validator.ValidateNull(entity);
+            _validator.ValidateID(id);
+            _validator.ValidateUpdate(id, entity);
+
             try
             {
                 NetworkType? networkTypeToUpdate = await _medicalAppointmentContext.NetworkType.FindAsync(id);
@@ -92,12 +86,10 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> Remove(int id, NetworkType entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null";
-                return operationResult;
-            }
+
+            _validator.ValidateNull(entity);
+            _validator.ValidateID(id);
+            _validator.ValidateRemove(id, entity);
             try
             {
                 NetworkType? networkTypeToRemove = await _medicalAppointmentContext.NetworkType.FindAsync(id);
@@ -153,6 +145,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
         public async override Task<OperationResult> GetEntityBy(int id)
         {
             OperationResult operationResult = new();
+
+            _validator.ValidateID(id);
             try
             {
                 operationResult.Data = await (from networkType in _medicalAppointmentContext.NetworkType
@@ -170,11 +164,7 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   UpdatedBy = networkType.UpdatedBy,
                                               }).AsNoTracking()
                              .ToListAsync();
-                if(operationResult.Data == null)
-                {
-                    operationResult.Success = false;
-                    operationResult.Message = "The selected ID does not exist in the Database.";
-                }
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Users;
 using MedicalAppointments.Persistance.Models.Users;
+using MedicalAppointments.Persistance.Validators.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,28 +14,19 @@ namespace MedicalAppointments.Persistance.Repositories.Users
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<DoctorsRepository> logger;
+        private readonly DoctorsValidator _validator;
 
-        public DoctorsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorsRepository> logger) : base(medicalAppointmentContext)
+        public DoctorsRepository(MedicalAppointmentContext medicalAppointmentContext, ILogger<DoctorsRepository> logger, DoctorsValidator validator) : base(medicalAppointmentContext)
         {
             _medicalAppointmentContext = medicalAppointmentContext;
+            _validator = validator;
             this.logger = logger;
         }
 
         public async override Task<OperationResult> Save(Doctors entity)
         {
             OperationResult operationResult = new();
-            if (entity == null)
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The entity is null.";
-                return operationResult;
-            }
-            if (entity.LicenseExpirationDate < DateOnly.FromDateTime(DateTime.UtcNow))
-            {
-                operationResult.Success = false;
-                operationResult.Message = "The Doctor's licence is already expired";
-                return operationResult;
-            }
+            _validator.ValidateSave(entity);
             try
             {
                 await base.Save(entity);
@@ -51,6 +43,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> Update(int id, Doctors entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateUpdate(id, entity);
             try
             {
                 Doctors? doctorsToUpdate = await _medicalAppointmentContext.Doctors.FindAsync(id);
@@ -65,7 +58,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                 doctorsToUpdate.ClinicAddress = entity.ClinicAddress;
                 doctorsToUpdate.AvailabilityModeId = entity.AvailabilityModeId;
                 doctorsToUpdate.LicenseExpirationDate = entity.LicenseExpirationDate;
-                doctorsToUpdate.UpdatedAt = entity.UpdatedAt;
+                doctorsToUpdate.UpdatedAt = DateTime.Now;
                 doctorsToUpdate.UpdatedBy = entity.UpdatedBy;
 
                 await _medicalAppointmentContext.SaveChangesAsync();
@@ -82,11 +75,12 @@ namespace MedicalAppointments.Persistance.Repositories.Users
         public async override Task<OperationResult> Remove(int id, Doctors entity)
         {
             OperationResult operationResult = new();
+            _validator.ValidateRemove(id, entity);
             try
             {
                 Doctors? doctorsToRemove = await _medicalAppointmentContext.Doctors.FindAsync(id);
                 doctorsToRemove.IsActive = false;
-                doctorsToRemove.UpdatedAt = entity.UpdatedAt;
+                doctorsToRemove.UpdatedAt = DateTime.Now;
                 doctorsToRemove.UpdatedBy = entity.UpdatedBy;
 
                 await _medicalAppointmentContext.SaveChangesAsync();
@@ -170,6 +164,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   UpdatedBy = doctors.UpdatedBy,
                                               }).AsNoTracking()
                               .ToListAsync();
+                operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }
             catch (Exception ex)
             {

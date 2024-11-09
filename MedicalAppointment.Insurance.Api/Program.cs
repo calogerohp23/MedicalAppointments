@@ -1,6 +1,8 @@
 using MedicalAppointments.Persistance.Context;
 using MedicalAppointments.Persistance.Interfaces.Insurance;
 using MedicalAppointments.Persistance.Repositories.Insurance;
+using MedicalAppointments.Persistance.Validators.Appointments;
+using MedicalAppointments.Persistance.Validators.Insurance;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,9 @@ builder.Services.AddDbContext<MedicalAppointmentContext>(option => option.UseSql
 
 // Dependencies Registry
 builder.Services.AddScoped<IInsuranceProvidersRepository, InsuranceProvidersRepository>();
+builder.Services.AddScoped<InsuranceProvidersValidator>();
 builder.Services.AddScoped<INetworkTypeRepository, NetworkTypeRepository>();
+builder.Services.AddScoped<NetworkTypeValidator>();
 
 // Services Registry
 
