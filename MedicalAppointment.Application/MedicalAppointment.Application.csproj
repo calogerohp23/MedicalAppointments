@@ -12,9 +12,14 @@
     <Folder Include="Contracts\Medical\" />
     <Folder Include="Contracts\Users\" />
     <Folder Include="Contracts\System\" />
-    <Folder Include="Dtos\" />
-    <Folder Include="Core\" />
-    <Folder Include="Services\" />
+    <Folder Include="Dtos\Appointments\" />
+    <Folder Include="Dtos\Insurance\" />
+    <Folder Include="Dtos\Medical\" />
+    <Folder Include="Dtos\System\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MedicalAppointments.Persistance\MedicalAppointments.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

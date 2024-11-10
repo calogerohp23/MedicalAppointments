@@ -36,7 +36,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpPost("SaveUsers")]
-        public async Task<IActionResult> Post([FromBody] MedicalAppointments.Domain.Entities.Users.Users users)
+        public async Task<IActionResult> Post([FromBody] MedicalAppointments.Domain.Entities.User.Users users)
         {
             var result = await _usersRepository.Save(users);
             if (!result.Success)
@@ -47,7 +47,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpPut("UpdateUsers")]
-        public async Task<IActionResult> Put(int id,[FromBody] MedicalAppointments.Domain.Entities.Users.Users users)
+        public async Task<IActionResult> Put(int id,[FromBody] MedicalAppointments.Domain.Entities.User.Users users)
         {
 
             var result = await _usersRepository.Update(id,users);
@@ -59,7 +59,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpDelete("DisableUsers")]
-        public async Task<IActionResult> Disable(int id,MedicalAppointments.Domain.Entities.Users.Users users)
+        public async Task<IActionResult> Disable(int id, MedicalAppointments.Domain.Entities.User.Users users)
         {
             var result = await _usersRepository.Remove(id, users);
             if (!result.Success)

@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalAppointments.Domain.Base;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointments.Domain.Entities.Insurance
 {
     [Table("NetworkType", Schema = "Insurance")]
-    public sealed class NetworkType : Base.BaseEntity
+    public sealed class NetworkType : BaseEntity
     {
         [Key]
         public int NetworkTypeID { get; private set; }

@@ -7,9 +7,10 @@ using MedicalAppointments.Persistance.Models.Users;
 using MedicalAppointments.Persistance.Validators.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
 namespace MedicalAppointments.Persistance.Repositories.Users
 {
-    public class UsersRepository : BaseRepository<Domain.Entities.Users.Users>, IUsersRepository
+    public class UsersRepository : BaseRepository<Userss>, IUsersRepository
     {
         private readonly MedicalAppointmentContext _medicalAppointmentContext;
         private readonly ILogger<UsersRepository> logger;
@@ -22,7 +23,7 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             this.logger = logger;
         }
 
-        public async override Task<OperationResult> Save(Domain.Entities.Users.Users entity)
+        public async override Task<OperationResult> Save(Userss entity)
         {
             OperationResult operationResult = new();
             _validator.ValidateSave(entity);
@@ -45,13 +46,13 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             return operationResult;
         }
 
-        public async override Task<OperationResult> Update(int id, Domain.Entities.Users.Users entity)
+        public async override Task<OperationResult> Update(int id, Userss entity)
         {
             OperationResult operationResult = new();
             _validator.ValidateUpdate(id, entity);
             try
             {
-                Domain.Entities.Users.Users? usersToUpdate = await _medicalAppointmentContext.Users.FindAsync(id);
+                Userss? usersToUpdate = await _medicalAppointmentContext.Users.FindAsync(id);
                 usersToUpdate.FirstName = entity.FirstName;
                 usersToUpdate.LastName = entity.LastName;
                 usersToUpdate.Email = entity.Email;
@@ -76,13 +77,13 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             return operationResult;
         }
 
-        public async override Task<OperationResult> Remove(int id, Domain.Entities.Users.Users entity)
+        public async override Task<OperationResult> Remove(int id, Userss entity)
         {
             OperationResult operationResult = new();
             _validator.ValidateRemove(id, entity);
             try
             {
-                Domain.Entities.Users.Users? usersToRemove = await _medicalAppointmentContext.Users.FindAsync(id);
+                Userss? usersToRemove = await _medicalAppointmentContext.Users.FindAsync(id);
                 usersToRemove.IsActive = false;
                 usersToRemove.UpdatedAt = entity.UpdatedAt;
                 usersToRemove.UpdatedBy = entity.UpdatedBy;

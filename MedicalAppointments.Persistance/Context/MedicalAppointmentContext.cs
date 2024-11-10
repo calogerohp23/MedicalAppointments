@@ -2,6 +2,7 @@
 using MedicalAppointments.Domain.Entities.Insurance;
 using MedicalAppointments.Domain.Entities.Medical;
 using MedicalAppointments.Domain.Entities.System;
+using MedicalAppointments.Domain.Entities.User;
 using MedicalAppointments.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,7 +40,7 @@ namespace MedicalAppointments.Persistance.Context
         #region "Users Entities"
         public DbSet<Doctors> Doctors { get; set; }
         public DbSet<Patients> Patients { get; set; }
-        public DbSet<Users> Users { get; set; }
+        public DbSet<Userss> Users { get; set; }
         #endregion
     }
 }

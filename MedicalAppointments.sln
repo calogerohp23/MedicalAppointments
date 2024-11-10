@@ -17,17 +17,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{E6861D84-C43
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Web", "MedicalAppointment.Web\MedicalAppointment.Web.csproj", "{B9113227-0D40-4525-9444-404AD60EB969}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Appointment.Api", "MedicalAppointment.Appointment.Appointment.Api\MedicalAppointment.Appointment.Api.csproj", "{EF681635-7D56-4767-8B84-444BDA2CD774}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Medical.Api", "MedicalAppointment.Medical.Api\MedicalAppointment.Medical.Api.csproj", "{40B8DFFF-865C-4F7B-B99F-663AC5ECB227}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users\MedicalAppointment.Users.Api.csproj", "{7AF5EDD5-D119-43BB-8DC1-8583A90F5361}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.System.Api", "MedicalAppointment.System.Api\MedicalAppointment.System.Api.csproj", "{D65F6B24-9589-452B-AC93-7B53CF3E5926}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Application", "MedicalAppointment.Application\MedicalAppointment.Application.csproj", "{5818DA99-2909-44B0-9829-27C37B4104E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.Insurance.Api", "MedicalAppointment.Insurance.Api\MedicalAppointment.Insurance.Api.csproj", "{F7DCA707-9E24-4EE0-B7B8-468189A156EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Insurance.Api", "MedicalAppointment.Insurance.Api\MedicalAppointment.Insurance.Api.csproj", "{F7DCA707-9E24-4EE0-B7B8-468189A156EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Appointment.Api", "MedicalAppointment.Appointment.Api\MedicalAppointment.Appointment.Api.csproj", "{467DD43A-19AE-4A5F-8579-8243D865DB9D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users.Api\MedicalAppointment.Users.Api.csproj", "{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,18 +51,10 @@ Global
 		{B9113227-0D40-4525-9444-404AD60EB969}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9113227-0D40-4525-9444-404AD60EB969}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9113227-0D40-4525-9444-404AD60EB969}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF681635-7D56-4767-8B84-444BDA2CD774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF681635-7D56-4767-8B84-444BDA2CD774}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF681635-7D56-4767-8B84-444BDA2CD774}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF681635-7D56-4767-8B84-444BDA2CD774}.Release|Any CPU.Build.0 = Release|Any CPU
 		{40B8DFFF-865C-4F7B-B99F-663AC5ECB227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{40B8DFFF-865C-4F7B-B99F-663AC5ECB227}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40B8DFFF-865C-4F7B-B99F-663AC5ECB227}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40B8DFFF-865C-4F7B-B99F-663AC5ECB227}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AF5EDD5-D119-43BB-8DC1-8583A90F5361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AF5EDD5-D119-43BB-8DC1-8583A90F5361}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AF5EDD5-D119-43BB-8DC1-8583A90F5361}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AF5EDD5-D119-43BB-8DC1-8583A90F5361}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D65F6B24-9589-452B-AC93-7B53CF3E5926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D65F6B24-9589-452B-AC93-7B53CF3E5926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D65F6B24-9589-452B-AC93-7B53CF3E5926}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +67,14 @@ Global
 		{F7DCA707-9E24-4EE0-B7B8-468189A156EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7DCA707-9E24-4EE0-B7B8-468189A156EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7DCA707-9E24-4EE0-B7B8-468189A156EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{467DD43A-19AE-4A5F-8579-8243D865DB9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{467DD43A-19AE-4A5F-8579-8243D865DB9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{467DD43A-19AE-4A5F-8579-8243D865DB9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{467DD43A-19AE-4A5F-8579-8243D865DB9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,12 +84,12 @@ Global
 		{D2139F6A-8B50-4B98-A23A-475CF6BAB747} = {04E9BA1B-BA0F-497F-86D1-E9633725B8A0}
 		{80BF308E-5918-40A4-A0C6-73DFAEF58A1E} = {04E9BA1B-BA0F-497F-86D1-E9633725B8A0}
 		{B9113227-0D40-4525-9444-404AD60EB969} = {BF5EF060-8389-4861-8BDC-A056C7B88901}
-		{EF681635-7D56-4767-8B84-444BDA2CD774} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
 		{40B8DFFF-865C-4F7B-B99F-663AC5ECB227} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
-		{7AF5EDD5-D119-43BB-8DC1-8583A90F5361} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
 		{D65F6B24-9589-452B-AC93-7B53CF3E5926} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
 		{5818DA99-2909-44B0-9829-27C37B4104E9} = {04E9BA1B-BA0F-497F-86D1-E9633725B8A0}
 		{F7DCA707-9E24-4EE0-B7B8-468189A156EF} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
+		{467DD43A-19AE-4A5F-8579-8243D865DB9D} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
+		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {035E8259-0685-4AA5-B16E-CDAF5FA73BDE}

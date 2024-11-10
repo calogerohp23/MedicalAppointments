@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalAppointments.Domain.Base;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalAppointments.Domain.Entities.Insurance
 {
     [Table("InsuranceProviders", Schema = "Insurance")]
-    public sealed class InsuranceProviders : Base.BaseEntity
+    public sealed class InsuranceProviders : BaseEntity
     {
         [Key]
         public int InsuranceProviderID { get; private set; }

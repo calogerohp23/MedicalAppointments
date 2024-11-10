@@ -4,9 +4,9 @@ using MedicalAppointments.Persistance.Base;
 
 namespace MedicalAppointments.Persistance.Validators.Users
 {
-    public class UsersValidator:BaseValidator<Domain.Entities.Users.Users>
+    public class UsersValidator:BaseValidator<Userss>
     {
-        public override OperationResult ValidateRemove(int id, Domain.Entities.Users.Users entity)
+        public override OperationResult ValidateRemove(int id, Userss entity)
         {
             OperationResult operationResult = new();
 
@@ -16,7 +16,7 @@ namespace MedicalAppointments.Persistance.Validators.Users
             return operationResult;
         }
 
-        public override OperationResult ValidateSave(Domain.Entities.Users.Users entity)
+        public override OperationResult ValidateSave(Userss entity)
         {
             OperationResult operationResult = new();
 
@@ -25,7 +25,7 @@ namespace MedicalAppointments.Persistance.Validators.Users
             return operationResult;
         }
 
-        public override OperationResult ValidateUpdate(int id, Domain.Entities.Users.Users entity)
+        public override OperationResult ValidateUpdate(int id, Userss entity)
         {
             OperationResult operationResult = new();
             base.ValidateNull(entity);

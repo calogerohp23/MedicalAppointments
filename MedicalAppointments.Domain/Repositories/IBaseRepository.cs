@@ -1,5 +1,4 @@
-﻿using MedicalAppointments.Domain.Entities.Appointments;
-using MedicalAppointments.Domain.Result;
+﻿using MedicalAppointments.Domain.Result;
 using System.Linq.Expressions;
 
 namespace MedicalAppointments.Domain.Repositories
