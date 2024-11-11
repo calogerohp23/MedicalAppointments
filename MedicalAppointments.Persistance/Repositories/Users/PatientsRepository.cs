@@ -102,6 +102,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                               join insuranceProvider in _medicalAppointmentContext.InsuranceProviders on patients.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
                                               join users in _medicalAppointmentContext.Users on patients.UserID equals users.UserID
                                               join netowrkType in _medicalAppointmentContext.NetworkType on insuranceProvider.NetworkTypeID equals netowrkType.NetworkTypeID
+                                              join createdUser in _medicalAppointmentContext.Users on patients.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on patients.UpdatedBy equals updatedUser.UserID
                                               where patients.IsActive == true
                                               select new PatientInsuranceUserInsuranceNetworkModel()
                                               {
@@ -121,9 +123,9 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   NetworkTypeName = netowrkType.Name,
                                                   NetworkTypeDescription = netowrkType.Description,
                                                   CreatedAt = patients.CreatedAt,
-                                                  CreatedBy = patients.CreatedBy,
                                                   UpdatedAt = patients.UpdatedAt,
-                                                  UpdatedBy = patients.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                               .ToListAsync();
             }
@@ -146,6 +148,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                               join insuranceProvider in _medicalAppointmentContext.InsuranceProviders on patients.InsuranceProviderID equals insuranceProvider.InsuranceProviderID
                                               join users in _medicalAppointmentContext.Users on patients.UserID equals users.UserID
                                               join netowrkType in _medicalAppointmentContext.NetworkType on insuranceProvider.NetworkTypeID equals netowrkType.NetworkTypeID
+                                              join createdUser in _medicalAppointmentContext.Users on patients.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on patients.UpdatedBy equals updatedUser.UserID
                                               where patients.IsActive == true && patients.PatientID == id
                                               select new PatientInsuranceUserInsuranceNetworkModel()
                                               {
@@ -165,9 +169,9 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   NetworkTypeName = netowrkType.Name,
                                                   NetworkTypeDescription = netowrkType.Description,
                                                   CreatedAt = patients.CreatedAt,
-                                                  CreatedBy = patients.CreatedBy,
                                                   UpdatedAt = patients.UpdatedAt,
-                                                  UpdatedBy = patients.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                 .ToListAsync();
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);

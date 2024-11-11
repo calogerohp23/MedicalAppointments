@@ -118,6 +118,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             try
             {
                 operationResult.Data = await (from networkType in _medicalAppointmentContext.NetworkType
+                                              join createdUser in _medicalAppointmentContext.Users on networkType.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on networkType.UpdatedBy equals updatedUser.UserID
                                               where networkType.IsActive == true
                                               orderby networkType.CreatedAt descending
                                               select new NetworkTypeModel()
@@ -128,8 +130,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   CreatedAt = networkType.CreatedAt,
                                                   UpdatedAt = networkType.UpdatedAt,
                                                   IsActive = networkType.IsActive,
-                                                  CreatedBy = networkType.CreatedBy,
-                                                  UpdatedBy = networkType.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                              .ToListAsync();
             }
@@ -150,6 +152,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             try
             {
                 operationResult.Data = await (from networkType in _medicalAppointmentContext.NetworkType
+                                              join createdUser in _medicalAppointmentContext.Users on networkType.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on networkType.UpdatedBy equals updatedUser.UserID
                                               where networkType.IsActive == true && networkType.NetworkTypeID == id
                                               orderby networkType.CreatedAt descending
                                               select new NetworkTypeModel()
@@ -160,8 +164,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   CreatedAt = networkType.CreatedAt,
                                                   UpdatedAt = networkType.UpdatedAt,
                                                   IsActive = networkType.IsActive,
-                                                  CreatedBy = networkType.CreatedBy,
-                                                  UpdatedBy = networkType.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                              .ToListAsync();
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);

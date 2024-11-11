@@ -21,9 +21,9 @@
         public string? CustomerSupportContact { get; set; }
         public string? AcceptedRegion { get; set; }
         public decimal? MaxCoverageAmount { get; set; }
+        public bool IsActive { get; set; }
         public DateTime? CreatdAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public bool IsActive { get; set; }
         public string? CreatedBy { get; set; }
         public string? UpdatedBy { get; set; }
 

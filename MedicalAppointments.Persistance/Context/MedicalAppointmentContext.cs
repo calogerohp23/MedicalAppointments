@@ -2,7 +2,6 @@
 using MedicalAppointments.Domain.Entities.Insurance;
 using MedicalAppointments.Domain.Entities.Medical;
 using MedicalAppointments.Domain.Entities.System;
-using MedicalAppointments.Domain.Entities.User;
 using MedicalAppointments.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 

@@ -103,6 +103,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                               join specialties in _medicalAppointmentContext.Specialities on doctors.SpecialtyId equals specialties.SpecialtyID
                                               join availability in _medicalAppointmentContext.AvailabilityModes on doctors.AvailabilityModeId equals availability.SAvailabilityModeID
                                               join users in _medicalAppointmentContext.Users on doctors.UserID equals users.UserID
+                                              join createdUser in _medicalAppointmentContext.Users on doctors.CreatedBy equals createdUser.CreatedBy
+                                              join updatedUser in _medicalAppointmentContext.Users on doctors.UpdatedBy equals updatedUser.UpdatedBy
                                               where doctors.IsActive == true
                                               select new DoctorsSpecialityAvailabilityModeUserModel()
                                               {
@@ -119,9 +121,9 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   AvailabilityMode = availability.AvailabilityMode,
                                                   LicenceExpirationDate = doctors.LicenseExpirationDate,
                                                   CreatedAt = doctors.CreatedAt,
-                                                  CreatedBy = doctors.CreatedBy,
                                                   UpdatedAt = doctors.UpdatedAt,
-                                                  UpdatedBy = doctors.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                               .ToListAsync();
             }
@@ -143,6 +145,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                               join specialties in _medicalAppointmentContext.Specialities on doctors.SpecialtyId equals specialties.SpecialtyID
                                               join availability in _medicalAppointmentContext.AvailabilityModes on doctors.AvailabilityModeId equals availability.SAvailabilityModeID
                                               join users in _medicalAppointmentContext.Users on doctors.UserID equals users.UserID
+                                              join createdUser in _medicalAppointmentContext.Users on doctors.CreatedBy equals createdUser.CreatedBy
+                                              join updatedUser in _medicalAppointmentContext.Users on doctors.UpdatedBy equals updatedUser.UpdatedBy
                                               where doctors.IsActive == true && doctors.DoctorID == id
                                               select new DoctorsSpecialityAvailabilityModeUserModel()
                                               {
@@ -159,9 +163,9 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   AvailabilityMode = availability.AvailabilityMode,
                                                   LicenceExpirationDate = doctors.LicenseExpirationDate,
                                                   CreatedAt = doctors.CreatedAt,
-                                                  CreatedBy = doctors.CreatedBy,
                                                   UpdatedAt = doctors.UpdatedAt,
-                                                  UpdatedBy = doctors.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                               .ToListAsync();
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);

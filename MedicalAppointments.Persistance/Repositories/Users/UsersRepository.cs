@@ -109,6 +109,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             {
                 operationResult.Data = await (from users in _medicalAppointmentContext.Users
                                               join roles in _medicalAppointmentContext.Roles on users.RoleId equals roles.RoleID
+                                              join createdUser in _medicalAppointmentContext.Users on users.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on users.UpdatedBy equals updatedUser.UserID
                                               where users.IsActive == true
                                               select new UserRoleModel()
                                               {
@@ -119,9 +121,9 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   Password = users.Password,
                                                   RoleType = roles.RoleName,
                                                   CreatedAt = users.CreatedAt,
-                                                  CreatedBy = users.CreatedBy,
                                                   UpdatedAt = users.UpdatedAt,
-                                                  UpdatedBy = users.UpdatedBy
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                               .ToListAsync();
                 operationResult.Success = true;
@@ -144,6 +146,8 @@ namespace MedicalAppointments.Persistance.Repositories.Users
             {
                 operationResult.Data = await (from users in _medicalAppointmentContext.Users
                                               join roles in _medicalAppointmentContext.Roles on users.RoleId equals roles.RoleID
+                                              join createdUser in _medicalAppointmentContext.Users on users.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on users.UpdatedBy equals updatedUser.UserID
                                               where users.IsActive == true && users.UserID == id
                                               select new UserRoleModel()
                                               {
@@ -154,13 +158,13 @@ namespace MedicalAppointments.Persistance.Repositories.Users
                                                   Password = users.Password,
                                                   RoleType = roles.RoleName,
                                                   CreatedAt = users.CreatedAt,
-                                                  CreatedBy = users.CreatedBy,
                                                   UpdatedAt = users.UpdatedAt,
-                                                  UpdatedBy = users.UpdatedBy
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                               .ToListAsync();
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);
-                
+
                 operationResult.Success = true;
                 operationResult.Message = "The query was succesful";
             }

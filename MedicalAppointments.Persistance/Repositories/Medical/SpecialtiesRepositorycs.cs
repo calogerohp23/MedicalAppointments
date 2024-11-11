@@ -93,6 +93,8 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             try
             {
                 operationResult.Data = await (from specialties in _medicalAppointmentContext.Specialities
+                                              join createdUser in _medicalAppointmentContext.Users on specialties.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on specialties.UpdatedBy equals updatedUser.UserID
                                               where specialties.IsActive == true
                                               orderby specialties.SpecialtyID descending
                                               select new SpecialtiesModel()
@@ -100,9 +102,9 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   SpecialtyID = specialties.SpecialtyID,
                                                   SpecialtyName = specialties.SpecialtyName,
                                                   CreatedAt = specialties.CreatedAt,
-                                                  CreatedBy = specialties.CreatedBy,
                                                   UpdatedAt = specialties.UpdatedAt,
-                                                  UpdatedBy = specialties.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                                   IsActive = specialties.IsActive,
                                               }).AsNoTracking()
                                              .ToListAsync();
@@ -123,6 +125,8 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             try
             {
                 operationResult.Data = await (from specialties in _medicalAppointmentContext.Specialities
+                                              join createdUser in _medicalAppointmentContext.Users on specialties.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on specialties.UpdatedBy equals updatedUser.UserID
                                               where specialties.IsActive == true
                                               orderby specialties.SpecialtyID descending
                                               where specialties.SpecialtyID == id
@@ -131,9 +135,9 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   SpecialtyID = specialties.SpecialtyID,
                                                   SpecialtyName = specialties.SpecialtyName,
                                                   CreatedAt = specialties.CreatedAt,
-                                                  CreatedBy = specialties.CreatedBy,
                                                   UpdatedAt = specialties.UpdatedAt,
-                                                  UpdatedBy = specialties.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                                   IsActive = specialties.IsActive,
 
                                               }).AsNoTracking()

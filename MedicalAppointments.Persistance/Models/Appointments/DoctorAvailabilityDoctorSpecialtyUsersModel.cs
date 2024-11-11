@@ -9,7 +9,5 @@
         public DateTime? AvailableDate { get; set; }
         public TimeOnly? StartTime { get; set; }
         public TimeOnly? EndTime { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public string? CreatedBy { get; set; }
     }
 }

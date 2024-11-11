@@ -90,15 +90,17 @@ namespace MedicalAppointments.Persistance.Repositories.System
             try
             {
                 operationResult.Data = await (from roles in _medicalAppointmentContext.Roles
+                                              join createdUser in _medicalAppointmentContext.Users on roles.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on roles.UpdatedBy equals updatedUser.UserID
                                               orderby roles.RoleID descending
                                               select new RolesModel()
                                               {
                                                   RoleID = roles.RoleID,
                                                   RoleName = roles.RoleName,
                                                   CreatedAt = roles.CreatedAt,
-                                                  CreatedBy = roles.CreatedBy,
                                                   UpdatedAt = roles.UpdatedAt,
-                                                  UpdatedBy = roles.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                                   IsActive = roles.IsActive,
                                               }).AsNoTracking().
                                               ToListAsync();
@@ -118,6 +120,8 @@ namespace MedicalAppointments.Persistance.Repositories.System
             try
             {
                 operationResult.Data = await (from roles in _medicalAppointmentContext.Roles
+                                              join createdUser in _medicalAppointmentContext.Users on roles.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on roles.UpdatedBy equals updatedUser.UserID
                                               where roles.RoleID == id
                                               orderby roles.RoleID descending
                                               select new RolesModel()
@@ -125,9 +129,9 @@ namespace MedicalAppointments.Persistance.Repositories.System
                                                   RoleID = roles.RoleID,
                                                   RoleName = roles.RoleName,
                                                   CreatedAt = roles.CreatedAt,
-                                                  CreatedBy = roles.CreatedBy,
                                                   UpdatedAt = roles.UpdatedAt,
-                                                  UpdatedBy = roles.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                                   IsActive = roles.IsActive,
                                               }).AsNoTracking().
                               ToListAsync();

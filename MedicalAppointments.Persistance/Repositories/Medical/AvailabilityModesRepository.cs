@@ -104,6 +104,8 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             try
             {
                 operationResult.Data = await (from availabilityModes in _medicalAppointmentContext.AvailabilityModes
+                                              join createdUser in _medicalAppointmentContext.Users on availabilityModes.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on availabilityModes.UpdatedBy equals updatedUser.UserID
                                               where availabilityModes.IsActive == true
                                               orderby availabilityModes.SAvailabilityModeID descending
                                               select new AvailabilityModesModel()
@@ -111,9 +113,9 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   SAvailabilityModeID = availabilityModes.SAvailabilityModeID,
                                                   AvailabilityMode = availabilityModes.AvailabilityMode,
                                                   CreatedAt = availabilityModes.CreatedAt,
-                                                  CreatedBy = availabilityModes.CreatedBy,
                                                   UpdatedAt = availabilityModes.UpdatedAt,
-                                                  UpdatedBy = availabilityModes.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                             .ToListAsync();
             }
@@ -133,6 +135,8 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
             try
             {
                 operationResult.Data = await (from availabilityModes in _medicalAppointmentContext.AvailabilityModes
+                                              join createdUser in _medicalAppointmentContext.Users on availabilityModes.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on availabilityModes.UpdatedBy equals updatedUser.UserID
                                               where availabilityModes.IsActive == true && availabilityModes.SAvailabilityModeID == id
                                               orderby availabilityModes.SAvailabilityModeID descending
                                               select new AvailabilityModesModel()
@@ -140,9 +144,9 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   SAvailabilityModeID = availabilityModes.SAvailabilityModeID,
                                                   AvailabilityMode = availabilityModes.AvailabilityMode,
                                                   CreatedAt = availabilityModes.CreatedAt,
-                                                  CreatedBy = availabilityModes.CreatedBy,
                                                   UpdatedAt = availabilityModes.UpdatedAt,
-                                                  UpdatedBy = availabilityModes.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                             .ToListAsync();
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);

@@ -28,6 +28,20 @@ namespace MedicalAppointment.Application.Services.Users
             try
             {
                 var result = await _usersRepository.GetAll();
+                List<UsersGetAllDto> users = ((List<Userss>)result.Data)
+                                            .Select(users => new UsersGetAllDto()
+                                            {
+                                                FirstName = users.FirstName,
+                                                LastName = users.LastName,
+                                                Email = users.Email,
+                                                RoleId = users.RoleId,
+                                                DateChange = users.UpdatedAt,
+                                                UserChange = users
+
+                                            }).ToList();
+
+
+
                 response.IsSuccess = result.Success;
                 response.Model = result.Data;
             }

@@ -1,4 +1,5 @@
 ﻿using MedicalAppointments.Domain.Entities.Appointments;
+using MedicalAppointments.Domain.Entities.Users;
 using MedicalAppointments.Domain.Result;
 using MedicalAppointments.Persistance.Base;
 using MedicalAppointments.Persistance.Context;
@@ -118,6 +119,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
                                               join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
                                               join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
+                                              join updatedUsers in _medicalAppointmentContext.Users on appointment.UpdatedBy equals updatedUsers.UserID
+                                              join createdUsers in _medicalAppointmentContext.Users on appointment.UpdatedBy equals createdUsers.UserID
                                               orderby appointment.AppointmentDate descending
                                               select new AppointmentPatientDoctorStatusModel()
                                               {
@@ -128,8 +131,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   AppointmentDate = appointment.AppointmentDate,
                                                   CreatedAt = appointment.CreatedAt,
                                                   UpdatedAt = appointment.UpdatedAt,
-                                                  CreatedBy = appointment.CreatedBy,
-                                                  UpdatedBy = appointment.UpdatedBy
+                                                  CreatedBy = createdUsers.FirstName + " " + createdUsers.LastName,
+                                                  UpdatedBy = updatedUsers.FirstName + " " + updatedUsers.LastName,
                                               }).AsNoTracking()
                                             .ToListAsync();
 
@@ -155,6 +158,8 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                               join status in _medicalAppointmentContext.Status on appointment.StatusID equals status.StatusId
                                               join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
                                               join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
+                                              join updatedUsers in _medicalAppointmentContext.Users on appointment.UpdatedBy equals updatedUsers.UserID
+                                              join createdUsers in _medicalAppointmentContext.Users on appointment.UpdatedBy equals createdUsers.UserID
                                               where appointment.AppointmentID == id
                                               orderby appointment.AppointmentDate descending
                                               select new AppointmentPatientDoctorStatusModel
@@ -166,9 +171,10 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   AppointmentDate = appointment.AppointmentDate,
                                                   CreatedAt = appointment.CreatedAt,
                                                   UpdatedAt = appointment.UpdatedAt,
-                                                  CreatedBy = appointment.CreatedBy,
-                                                  UpdatedBy = appointment.UpdatedBy
-                                              }).FirstOrDefaultAsync();
+                                                  CreatedBy = createdUsers.FirstName + " " + createdUsers.LastName,
+                                                  UpdatedBy = updatedUsers.FirstName + " " + updatedUsers.LastName,
+                                              }).AsNoTracking()
+                                              .ToListAsync();
                 
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);
             }

@@ -124,6 +124,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Data = await (from insuranceProviders in _medicalAppointmentContext.InsuranceProviders
                                               join networkType in _medicalAppointmentContext.NetworkType on insuranceProviders.NetworkTypeID equals networkType.NetworkTypeID
+                                              join createdUser in _medicalAppointmentContext.Users on insuranceProviders.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on insuranceProviders.UpdatedBy equals updatedUser.UserID
                                               where insuranceProviders.IsActive == true
                                               orderby insuranceProviders.CreatedAt descending
                                               select new InsuranceProvidersNetworkTypeModel()
@@ -147,9 +149,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   MaxCoverageAmount = insuranceProviders.MaxCoverageAmount,
                                                   CreatdAt = insuranceProviders.CreatedAt,
                                                   UpdatedAt = insuranceProviders.UpdatedAt,
-                                                  CreatedBy = insuranceProviders.CreatedBy,
-                                                  UpdatedBy = insuranceProviders.UpdatedBy,
-
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                             .ToListAsync();
             }
@@ -171,6 +172,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
             {
                 operationResult.Data = await (from insuranceProviders in _medicalAppointmentContext.InsuranceProviders
                                               join networkType in _medicalAppointmentContext.NetworkType on insuranceProviders.NetworkTypeID equals networkType.NetworkTypeID
+                                              join createdUser in _medicalAppointmentContext.Users on insuranceProviders.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on insuranceProviders.UpdatedBy equals updatedUser.UserID
                                               where insuranceProviders.IsActive == true && insuranceProviders.InsuranceProviderID == id
                                               orderby insuranceProviders.CreatedAt descending
                                               select new InsuranceProvidersNetworkTypeModel()
@@ -194,9 +197,8 @@ namespace MedicalAppointments.Persistance.Repositories.Insurance
                                                   MaxCoverageAmount = insuranceProviders.MaxCoverageAmount,
                                                   CreatdAt = insuranceProviders.CreatedAt,
                                                   UpdatedAt = insuranceProviders.UpdatedAt,
-                                                  CreatedBy = insuranceProviders.CreatedBy,
-                                                  UpdatedBy = insuranceProviders.UpdatedBy,
-
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                             .ToListAsync();
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);

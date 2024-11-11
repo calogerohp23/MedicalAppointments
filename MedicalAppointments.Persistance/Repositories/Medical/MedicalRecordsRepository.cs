@@ -102,6 +102,8 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                               join doctors in _medicalAppointmentContext.Doctors on medicalRecords.DoctorID equals doctors.DoctorID
                                               join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
                                               join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
+                                              join createdUser in _medicalAppointmentContext.Users on medicalRecords.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on medicalRecords.UpdatedBy equals updatedUser.UserID
                                               orderby medicalRecords.CreatedAt descending
                                               select new MedicalRecordsPatientsDoctorsModel()
                                               {
@@ -113,8 +115,10 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   DateOfVisit = medicalRecords.DateOfVisit,
                                                   DoctorID = doctors.DoctorID,
                                                   DoctorName = doctorUsers.FirstName + " " + doctorUsers.LastName,
+                                                  CreatedAt = medicalRecords.CreatedAt,
                                                   UpdatedAt = medicalRecords.UpdatedAt,
-                                                  UpdatedBy = medicalRecords.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                             .ToListAsync();
             }
@@ -138,6 +142,8 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                               join doctors in _medicalAppointmentContext.Doctors on medicalRecords.DoctorID equals doctors.DoctorID
                                               join patientUsers in _medicalAppointmentContext.Users on patients.UserID equals patientUsers.UserID
                                               join doctorUsers in _medicalAppointmentContext.Users on doctors.UserID equals doctorUsers.UserID
+                                              join createdUser in _medicalAppointmentContext.Users on medicalRecords.CreatedBy equals createdUser.UserID
+                                              join updatedUser in _medicalAppointmentContext.Users on medicalRecords.UpdatedBy equals updatedUser.UserID
                                               orderby medicalRecords.CreatedAt descending
                                               where medicalRecords.RecordId == id
                                               select new MedicalRecordsPatientsDoctorsModel()
@@ -150,8 +156,10 @@ namespace MedicalAppointments.Persistance.Repositories.Medical
                                                   DateOfVisit = medicalRecords.DateOfVisit,
                                                   DoctorID = doctors.DoctorID,
                                                   DoctorName = doctorUsers.FirstName + " " + doctorUsers.LastName,
+                                                  CreatedAt = medicalRecords.CreatedAt,
                                                   UpdatedAt = medicalRecords.UpdatedAt,
-                                                  UpdatedBy = medicalRecords.UpdatedBy,
+                                                  CreatedBy = createdUser.FirstName + " " + createdUser.LastName,
+                                                  UpdatedBy = updatedUser.FirstName + " " + updatedUser.LastName,
                                               }).AsNoTracking()
                                             .ToListAsync();
                 operationResult.Data = _validator.ValidateNullData(operationResult.Data);

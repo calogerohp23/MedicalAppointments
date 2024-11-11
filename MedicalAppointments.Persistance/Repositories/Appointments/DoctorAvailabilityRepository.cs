@@ -36,8 +36,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             }
             try
             {
-                entity.CreatedAt = DateTime.Now;
-                entity.UpdatedAt = DateTime.Now;
                 operationResult = await base.Save(entity);
 
                 operationResult.Success = true;
@@ -67,8 +65,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                 doctorAvailabilityToUpdate.AvailableDate = entity.AvailableDate;
                 doctorAvailabilityToUpdate.StartTime = entity.StartTime;
                 doctorAvailabilityToUpdate.EndTime = entity.EndTime;
-                doctorAvailabilityToUpdate.UpdatedAt = DateTime.Now;
-                doctorAvailabilityToUpdate.UpdatedBy = entity.UpdatedBy;
 
                 await _medicalAppointmentContext.SaveChangesAsync();
                 operationResult.Success = true;
@@ -92,9 +88,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
             try
             {
                 DoctorAvailability? doctorAvailabilityToRemove = await _medicalAppointmentContext.DoctorAvailability.FindAsync(id);
-                doctorAvailabilityToRemove.IsActive = false;
-                doctorAvailabilityToRemove.UpdatedAt = DateTime.Now;
-                doctorAvailabilityToRemove.UpdatedBy = entity.UpdatedBy;
 
                 await _medicalAppointmentContext.SaveChangesAsync();
                 operationResult.Success = true;
@@ -129,8 +122,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   AvailableDate = doctorAvailabity.AvailableDate,
                                                   StartTime = doctorAvailabity.StartTime,
                                                   EndTime = doctorAvailabity.EndTime,
-                                                  CreatedAt = doctorAvailabity.CreatedAt,
-                                                  CreatedBy = doctorAvailabity.CreatedBy
                                               }).AsNoTracking()
                                             .ToListAsync();
             }
@@ -165,8 +156,6 @@ namespace MedicalAppointments.Persistance.Repositories.Appointments
                                                   AvailableDate = doctorAvailabity.AvailableDate,
                                                   StartTime = doctorAvailabity.StartTime,
                                                   EndTime = doctorAvailabity.EndTime,
-                                                  CreatedAt = doctorAvailabity.CreatedAt,
-                                                  CreatedBy = doctorAvailabity.CreatedBy
                                               }).AsNoTracking()
                                             .ToListAsync();
 
