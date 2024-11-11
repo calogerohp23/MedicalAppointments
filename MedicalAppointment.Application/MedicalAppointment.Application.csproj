@@ -12,10 +12,16 @@
     <Folder Include="Contracts\Medical\" />
     <Folder Include="Contracts\Users\" />
     <Folder Include="Contracts\System\" />
-    <Folder Include="Dtos\Appointments\" />
-    <Folder Include="Dtos\Insurance\" />
-    <Folder Include="Dtos\Medical\" />
-    <Folder Include="Dtos\System\" />
+    <Folder Include="Dtos\Appointments\Appointment\" />
+    <Folder Include="Dtos\Appointments\DoctorAvailability\" />
+    <Folder Include="Dtos\Insurance\InsuranceProvider\" />
+    <Folder Include="Dtos\Insurance\NetworkType\" />
+    <Folder Include="Dtos\Medical\MedicalRecords\" />
+    <Folder Include="Dtos\Medical\AvailabilityModes\" />
+    <Folder Include="Dtos\Medical\Specialties\" />
+    <Folder Include="Dtos\System\Status\" />
+    <Folder Include="Dtos\System\Roles\" />
+    <Folder Include="Dtos\System\Notifications\" />
   </ItemGroup>
 
   <ItemGroup>
