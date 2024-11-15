@@ -34,9 +34,10 @@ namespace MedicalAppointment.Application.Services.Users
                                                 FirstName = users.FirstName,
                                                 LastName = users.LastName,
                                                 Email = users.Email,
+                                                Password = users.Password,
                                                 RoleId = users.RoleId,
                                                 DateChange = users.UpdatedAt,
-                                                UserChange = users
+                                                UserChange = users.UpdatedBy,
 
                                             }).ToList();
 
