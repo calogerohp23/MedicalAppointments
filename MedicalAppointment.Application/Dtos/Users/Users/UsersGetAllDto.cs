@@ -2,7 +2,7 @@
 {
     public class UsersGetAllDto : UsersBaseDto
     {
-        public int UserID { get; set; }
+        public int UserID { get; private set; }
 
     }
 }

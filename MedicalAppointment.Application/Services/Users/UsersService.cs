@@ -38,11 +38,8 @@ namespace MedicalAppointment.Application.Services.Users
                                                 RoleId = users.RoleId,
                                                 DateChange = users.UpdatedAt,
                                                 UserChange = users.UpdatedBy,
-
+                                                CreatedUser = users.CreatedBy
                                             }).ToList();
-
-
-
                 response.IsSuccess = result.Success;
                 response.Model = result.Data;
             }
@@ -62,6 +59,14 @@ namespace MedicalAppointment.Application.Services.Users
             try
             {
                 var result = await _usersRepository.GetEntityBy(id);
+
+                Userss users = (Userss)result.Data;
+
+                UsersGetAllDto usersDto = new();
+                {
+                    UserI
+                };
+
                 response.IsSuccess = result.Success;
                 response.Model = result.Data;
             }
@@ -87,8 +92,10 @@ namespace MedicalAppointment.Application.Services.Users
                     Email = dto.Email,
                     Password = dto.Password,
                     RoleId = dto.RoleId,
+                    CreatedBy = dto.CreatedUser,
                     CreatedAt = dto.CreatedAt,
-                    CreatedBy = dto.CreatedBy
+                    UpdatedBy = dto.UserChange,
+                    UpdatedAt = dto.DateChange
                 };
                 var result = await _usersRepository.Save(users);
             }

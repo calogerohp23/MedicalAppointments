@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Appointm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalAppointment.Users.Api", "MedicalAppointment.Users.Api\MedicalAppointment.Users.Api.csproj", "{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalAppointment.IOC", "MedicalAppointment.IOC\MedicalAppointment.IOC.csproj", "{FBEEB476-838A-4D08-859D-CC1695E9EA1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBEEB476-838A-4D08-859D-CC1695E9EA1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBEEB476-838A-4D08-859D-CC1695E9EA1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBEEB476-838A-4D08-859D-CC1695E9EA1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBEEB476-838A-4D08-859D-CC1695E9EA1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{F7DCA707-9E24-4EE0-B7B8-468189A156EF} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
 		{467DD43A-19AE-4A5F-8579-8243D865DB9D} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
 		{DB4AC3C4-13E1-4C6A-9FEA-9ADE15DAE5D4} = {E6861D84-C43C-45DC-8233-AD0A2B93514E}
+		{FBEEB476-838A-4D08-859D-CC1695E9EA1F} = {04E9BA1B-BA0F-497F-86D1-E9633725B8A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {035E8259-0685-4AA5-B16E-CDAF5FA73BDE}

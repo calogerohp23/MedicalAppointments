@@ -7,21 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Appointments\" />
-    <Folder Include="Contracts\Insurance\" />
-    <Folder Include="Contracts\Medical\" />
-    <Folder Include="Contracts\Users\" />
-    <Folder Include="Contracts\System\" />
-    <Folder Include="Dtos\Appointments\Appointment\" />
-    <Folder Include="Dtos\Appointments\DoctorAvailability\" />
-    <Folder Include="Dtos\Insurance\InsuranceProvider\" />
-    <Folder Include="Dtos\Insurance\NetworkType\" />
-    <Folder Include="Dtos\Medical\MedicalRecords\" />
-    <Folder Include="Dtos\Medical\AvailabilityModes\" />
-    <Folder Include="Dtos\Medical\Specialties\" />
-    <Folder Include="Dtos\System\Status\" />
-    <Folder Include="Dtos\System\Roles\" />
-    <Folder Include="Dtos\System\Notifications\" />
+    <Compile Remove="Dtos\Appointments\**" />
+    <Compile Remove="Dtos\Insurance\**" />
+    <Compile Remove="Dtos\Medical\**" />
+    <Compile Remove="Dtos\System\**" />
+    <EmbeddedResource Remove="Dtos\Appointments\**" />
+    <EmbeddedResource Remove="Dtos\Insurance\**" />
+    <EmbeddedResource Remove="Dtos\Medical\**" />
+    <EmbeddedResource Remove="Dtos\System\**" />
+    <None Remove="Dtos\Appointments\**" />
+    <None Remove="Dtos\Insurance\**" />
+    <None Remove="Dtos\Medical\**" />
+    <None Remove="Dtos\System\**" />
   </ItemGroup>
 
   <ItemGroup>
