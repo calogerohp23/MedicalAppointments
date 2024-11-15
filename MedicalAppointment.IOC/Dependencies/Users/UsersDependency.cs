@@ -8,9 +8,12 @@ namespace MedicalAppointment.IOC.Dependencies.Users
         public static void AddUsersDependency(this IServiceCollection service)
         {
             service.AddScoped<IDoctorsRepository, DoctorsRepository>();
+            
             service.AddScoped<IPatientsRepository, PatientsRepository>();
+            
             service.AddScoped<IUsersRepository, UsersRepository>();
-            //service.AddTransient<>
+            
+            service.AddTransient<IUsersRepository, UsersRepository>();
         }
     }
 }
