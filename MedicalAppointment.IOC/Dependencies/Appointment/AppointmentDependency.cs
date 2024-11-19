@@ -10,6 +10,7 @@ namespace MedicalAppointment.IOC.Dependencies.Appointment
         public static void AddAppointmentDependency(this IServiceCollection services)
         {
             services.AddScoped<IAppointmentRepository,AppointmentRepository>();
+
             services.AddScoped<IDoctorAvailabilityRepository, DoctorAvailabilityRepository>();
         }
     }

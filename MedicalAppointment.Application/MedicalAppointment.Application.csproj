@@ -7,22 +7,43 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Dtos\Appointments\**" />
-    <Compile Remove="Dtos\Insurance\**" />
-    <Compile Remove="Dtos\Medical\**" />
-    <Compile Remove="Dtos\System\**" />
-    <EmbeddedResource Remove="Dtos\Appointments\**" />
-    <EmbeddedResource Remove="Dtos\Insurance\**" />
-    <EmbeddedResource Remove="Dtos\Medical\**" />
-    <EmbeddedResource Remove="Dtos\System\**" />
-    <None Remove="Dtos\Appointments\**" />
-    <None Remove="Dtos\Insurance\**" />
-    <None Remove="Dtos\Medical\**" />
-    <None Remove="Dtos\System\**" />
+    <ProjectReference Include="..\MedicalAppointments.Persistance\MedicalAppointments.Persistance.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MedicalAppointments.Persistance\MedicalAppointments.Persistance.csproj" />
+    <Folder Include="Dtos\Appointments\Appointment\" />
+    <Folder Include="Dtos\Appointments\DoctorAvailability\" />
+    <Folder Include="Dtos\Insurance\InsuranceProviders\" />
+    <Folder Include="Dtos\Insurance\NetworkType\" />
+    <Folder Include="Dtos\Medical\MedicalRecords\" />
+    <Folder Include="Dtos\Medical\AvailabilityModes\" />
+    <Folder Include="Dtos\Medical\Specialties\" />
+    <Folder Include="Dtos\System\Notifications\" />
+    <Folder Include="Dtos\System\Roles\" />
+    <Folder Include="Dtos\System\Status\" />
+    <Folder Include="Dtos\Users\Doctors\" />
+    <Folder Include="Response\Appointments\Appointment\" />
+    <Folder Include="Response\Appointments\DoctorAvailability\" />
+    <Folder Include="Response\Insurance\InsuranceProviders\" />
+    <Folder Include="Response\Insurance\NetworkType\" />
+    <Folder Include="Response\Medical\MedicalRecords\" />
+    <Folder Include="Response\Medical\AvailabilityModes\" />
+    <Folder Include="Response\Medical\Specialties\" />
+    <Folder Include="Response\System\Status\" />
+    <Folder Include="Response\System\Roles\" />
+    <Folder Include="Response\System\Notifications\" />
+    <Folder Include="Response\Users\Doctors\" />
+    <Folder Include="Response\Users\Patients\" />
+    <Folder Include="Services\Appointments\Appointment\" />
+    <Folder Include="Services\Appointments\DoctorAvailability\" />
+    <Folder Include="Services\Insurance\InsuranceProviders\" />
+    <Folder Include="Services\Insurance\NetworkType\" />
+    <Folder Include="Services\Medical\AvailabilityModes\" />
+    <Folder Include="Services\Medical\MedicalRecords\" />
+    <Folder Include="Services\Medical\Specialties\" />
+    <Folder Include="Services\System\Notifications\" />
+    <Folder Include="Services\System\Roles\" />
+    <Folder Include="Services\System\Status\" />
   </ItemGroup>
 
 </Project>
