@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MedicalAppointment.Application.Contracts.System
+namespace MedicalAppointment.Application.Dtos.Users.User
 {
-    internal interface INotificationsService
+    internal class UserGetAllDto
     {
     }
 }

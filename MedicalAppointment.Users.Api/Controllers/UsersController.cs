@@ -1,4 +1,5 @@
-﻿using MedicalAppointments.Persistance.Interfaces.Users;
+﻿using MedicalAppointments.Domain.Entities.Users;
+using MedicalAppointments.Persistance.Interfaces.Users;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -36,7 +37,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpPost("SaveUsers")]
-        public async Task<IActionResult> Post([FromBody] MedicalAppointments.Domain.Entities.User.Users users)
+        public async Task<IActionResult> Post([FromBody] Userss users)
         {
             var result = await _usersRepository.Save(users);
             if (!result.Success)
@@ -47,7 +48,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpPut("UpdateUsers")]
-        public async Task<IActionResult> Put(int id,[FromBody] MedicalAppointments.Domain.Entities.User.Users users)
+        public async Task<IActionResult> Put(int id,[FromBody] Userss users)
         {
 
             var result = await _usersRepository.Update(id,users);
@@ -59,7 +60,7 @@ namespace MedicalAppointment.Users.Api.Controllers
         }
 
         [HttpDelete("DisableUsers")]
-        public async Task<IActionResult> Disable(int id, MedicalAppointments.Domain.Entities.User.Users users)
+        public async Task<IActionResult> Disable(int id, Userss users)
         {
             var result = await _usersRepository.Remove(id, users);
             if (!result.Success)

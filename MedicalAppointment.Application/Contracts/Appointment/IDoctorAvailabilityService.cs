@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MedicalAppointment.Application.Base;
+using MedicalAppointment.Application.Dtos.Appointments.DoctorAvailability;
+using MedicalAppointment.Application.Response.Appointments.DoctorAvailability;
 
 namespace MedicalAppointment.Application.Contracts.Appointment
 {
-    internal interface IDoctorAvailabilityService
+    public interface IDoctorAvailabilityService : IBaseService<DoctorAvailabilityResponse, DoctorAvailabilitySaveDto,DoctorAvailabilityUpdateDto>
     {
     }
 }
