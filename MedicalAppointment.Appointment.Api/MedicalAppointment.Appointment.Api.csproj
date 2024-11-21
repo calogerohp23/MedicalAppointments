@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MedicalAppointment.Application\MedicalAppointment.Application.csproj" />
     <ProjectReference Include="..\MedicalAppointment.IOC\MedicalAppointment.IOC.csproj" />
     <ProjectReference Include="..\MedicalAppointments.Persistance\MedicalAppointments.Persistance.csproj" />
   </ItemGroup>
