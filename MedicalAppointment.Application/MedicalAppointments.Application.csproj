@@ -8,17 +8,33 @@
 
   <ItemGroup>
     <Compile Remove="Abstractions\**" />
-    <Compile Remove="Behaviors\**" />
-    <Compile Remove="Contracts\**" />
-    <Compile Remove="Entities\**" />
     <EmbeddedResource Remove="Abstractions\**" />
-    <EmbeddedResource Remove="Behaviors\**" />
-    <EmbeddedResource Remove="Contracts\**" />
-    <EmbeddedResource Remove="Entities\**" />
     <None Remove="Abstractions\**" />
-    <None Remove="Behaviors\**" />
-    <None Remove="Contracts\**" />
-    <None Remove="Entities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstraction\Email\" />
+    <Folder Include="Abstraction\Messaging\" />
+    <Folder Include="Behaviors\" />
+    <Folder Include="Contracts\" />
+    <Folder Include="Entities\Appointments\Events\" />
+    <Folder Include="Entities\Appointments\Messaging\" />
+    <Folder Include="Entities\Doctor\Events\" />
+    <Folder Include="Entities\Doctor\Messaging\" />
+    <Folder Include="Entities\MedicalNotes\Events\" />
+    <Folder Include="Entities\MedicalNotes\Messaging\" />
+    <Folder Include="Entities\User\Events\" />
+    <Folder Include="Entities\User\Messaging\" />
+    <Folder Include="Entities\Patient\Events\" />
+    <Folder Include="Entities\Patient\Messaging\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MedicalAppointments.Domain\MedicalAppointments.Domain.csproj" />
   </ItemGroup>
 
 </Project>
